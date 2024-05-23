@@ -1,0 +1,1961 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Lucene Parser > should parse AND ! combination 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "The Right Way",
+          },
+        },
+        {
+          "node": {
+            "field": "text",
+            "quoted": false,
+            "restricted": true,
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": "go",
+            },
+          },
+          "type": "negation",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse AND NOT combination 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "The Right Way",
+          },
+        },
+        {
+          "node": {
+            "field": "text",
+            "quoted": false,
+            "restricted": true,
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": "go",
+            },
+          },
+          "type": "negation",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse AND operator 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "The Right Way",
+          },
+        },
+        {
+          "field": "text",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "go",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse AND with grouped OR and NOT 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "foo",
+          },
+        },
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "bar",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+        {
+          "field": null,
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "-qux",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse NOT operator 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "The Right Way",
+          },
+        },
+        {
+          "node": {
+            "field": "text",
+            "quoted": false,
+            "restricted": true,
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": "go",
+            },
+          },
+          "type": "negation",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse OR operator 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "quoted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "The Right Way",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": "text",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "go",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse another simple query 1`] = `
+{
+  "field": null,
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "anotherQuery",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse basic regex 1`] = `
+{
+  "field": "field",
+  "type": "regexp",
+  "value": {
+    "type": "value",
+    "value": "[a-z]+",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse combination of phrases, fields, ranges, and boolean logic 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "foo bar",
+                  },
+                },
+                {
+                  "field": "body",
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "qux",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                    {
+                      "nodes": [
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "quux",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "field-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "date",
+                  "left": {
+                    "operator": "gte",
+                    "type": "term",
+                    "value": {
+                      "type": "value",
+                      "value": 20200101,
+                    },
+                  },
+                  "right": {
+                    "operator": "lte",
+                    "type": "term",
+                    "value": {
+                      "type": "value",
+                      "value": 20210101,
+                    },
+                  },
+                  "type": "range",
+                },
+                {
+                  "field": "status",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "active",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse complex nested groups 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "foo",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "bar",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "qux",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse date range 1`] = `
+{
+  "field": "date",
+  "left": {
+    "operator": "gte",
+    "quoted": false,
+    "restricted": true,
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": "2020-01-01",
+    },
+  },
+  "right": {
+    "operator": "lte",
+    "quoted": false,
+    "restricted": true,
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": "2021-01-01",
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse different fields in groups 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "field1",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "foo",
+          },
+        },
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "field2",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "bar",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "field": "field3",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse empty query 1`] = `
+{
+  "type": "empty",
+}
+`;
+
+exports[`Lucene Parser > should parse escaped backslashes in path 1`] = `
+{
+  "field": "field",
+  "quoted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "C:\\Users\\name",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse escaped field name 1`] = `
+{
+  "field": "field",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "name:value",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse escaped hyphen 1`] = `
+{
+  "field": "field",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo\\-bar",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse escaped quotes in phrase 1`] = `
+{
+  "field": "field",
+  "quoted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "a phrase with "escaped quotes"",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse escaped space in phrase 1`] = `
+{
+  "field": "field",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": ""foo\\ bar"",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse exclusive date range 1`] = `
+{
+  "field": "date",
+  "left": {
+    "operator": "gt",
+    "quoted": false,
+    "restricted": true,
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": "2020-01-01",
+    },
+  },
+  "right": {
+    "operator": "lt",
+    "quoted": false,
+    "restricted": true,
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": "2021-01-01",
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse exclusive range search 1`] = `
+{
+  "field": "date",
+  "left": {
+    "operator": "gt",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20020101,
+    },
+  },
+  "right": {
+    "operator": "lt",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20030101,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse exists query 1`] = `
+{
+  "field": "title",
+  "type": "exists",
+}
+`;
+
+exports[`Lucene Parser > should parse field and grouped terms 1`] = `
+{
+  "field": "title",
+  "name": "foo",
+  "params": [
+    {
+      "field": null,
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "bar",
+      },
+    },
+    {
+      "field": null,
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "AND",
+      },
+    },
+    {
+      "field": null,
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "baz",
+      },
+    },
+  ],
+  "type": "function",
+}
+`;
+
+exports[`Lucene Parser > should parse field with no value 1`] = `
+{
+  "field": null,
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "field:",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse greater than or equal to 1`] = `
+{
+  "field": "price",
+  "left": {
+    "operator": "gte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 10,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse grouping with OR and AND 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "apple",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "banana",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "red",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "field": null,
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "yellow",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse hyphen in term 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo-bar",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse inclusive range search 1`] = `
+{
+  "field": "date",
+  "left": {
+    "operator": "gte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20020101,
+    },
+  },
+  "right": {
+    "operator": "lte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20030101,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse infix wildcard 1`] = `
+{
+  "field": "field",
+  "type": "wildcard",
+  "value": {
+    "type": "value",
+    "value": "f*o",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse leading wildcard 1`] = `
+{
+  "field": "field",
+  "type": "wildcard",
+  "value": {
+    "type": "value",
+    "value": "*foo",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse less than or equal to 1`] = `
+{
+  "field": "price",
+  "left": {
+    "operator": "lte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse mandatory and prohibited terms 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": null,
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "+title:foo",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": "-body",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "bar",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse match all query 1`] = `
+{
+  "field": "*",
+  "type": "wildcard",
+  "value": {
+    "type": "value",
+    "value": "*",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse missing query 1`] = `
+{
+  "field": "_missing_",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "title",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse mixed case field names 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "Title",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "Foo",
+          },
+        },
+        {
+          "field": "body",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "Bar",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse negative number 1`] = `
+{
+  "field": "price",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "-20",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse nested AND/OR 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "foo bar",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "qux",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "quux",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse nested complex with multiple fields 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "foo",
+                          },
+                        },
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "bar",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "logical-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "baz",
+                          },
+                        },
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "qux",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "logical-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "status",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "active",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "field": "status",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "pending",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse nested complex with range 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "foo",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "bar",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "field-group",
+                },
+                {
+                  "field": "body",
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "baz",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                    {
+                      "nodes": [
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "qux",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "field-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+        {
+          "field": "date",
+          "left": {
+            "operator": "gte",
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": 20200101,
+            },
+          },
+          "right": {
+            "operator": "lte",
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": 20210101,
+            },
+          },
+          "type": "range",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse nested groups 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "foo",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "bar",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "title",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+                {
+                  "field": "body",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "qux",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse nested groups with different fields 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "field1",
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "field1",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "foo",
+                  },
+                },
+                {
+                  "field": "field1",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "bar",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "field-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": "field2",
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "field": "field2",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "baz",
+                  },
+                },
+                {
+                  "field": "field2",
+                  "quoted": false,
+                  "restricted": true,
+                  "type": "term",
+                  "value": {
+                    "type": "value",
+                    "value": "qux",
+                  },
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "field-group",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse nested groups with range 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "flow": [
+            {
+              "nodes": [
+                {
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "foo",
+                          },
+                        },
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "bar",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "logical-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+            {
+              "nodes": [
+                {
+                  "flow": [
+                    {
+                      "nodes": [
+                        {
+                          "field": "title",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "baz",
+                          },
+                        },
+                        {
+                          "field": "body",
+                          "quoted": false,
+                          "restricted": true,
+                          "type": "term",
+                          "value": {
+                            "type": "value",
+                            "value": "qux",
+                          },
+                        },
+                      ],
+                      "type": "conjunction",
+                    },
+                  ],
+                  "type": "logical-group",
+                },
+              ],
+              "type": "conjunction",
+            },
+          ],
+          "type": "logical-group",
+        },
+        {
+          "field": "date",
+          "left": {
+            "operator": "gte",
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": 20200101,
+            },
+          },
+          "right": {
+            "operator": "lte",
+            "type": "term",
+            "value": {
+              "type": "value",
+              "value": 20210101,
+            },
+          },
+          "type": "range",
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse not a variable reference 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "ref$title",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse numeric range 1`] = `
+{
+  "field": "age",
+  "left": {
+    "operator": "gte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 10,
+    },
+  },
+  "right": {
+    "operator": "lte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 20,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse phrase with punctuation 1`] = `
+{
+  "field": "title",
+  "quoted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "Hello, World!",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse plus sign in term 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo+bar",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse query with Chinese characters 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "汉字",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse query with Japanese characters 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "日本語",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse query with Korean characters 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "한국어",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse query with accented characters 1`] = `
+{
+  "field": "title",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "résumé",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse query with function 1`] = `
+{
+  "field": "field",
+  "name": "func",
+  "params": [
+    {
+      "field": "val",
+      "quoted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "quoted",
+      },
+    },
+    {
+      "field": "val2",
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "500,",
+      },
+    },
+    {
+      "field": "val3",
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "with",
+      },
+    },
+    {
+      "field": null,
+      "quoted": false,
+      "restricted": true,
+      "type": "term",
+      "value": {
+        "type": "value",
+        "value": "spaces",
+      },
+    },
+  ],
+  "type": "function",
+}
+`;
+
+exports[`Lucene Parser > should parse range with open end 1`] = `
+{
+  "field": "field",
+  "left": {
+    "operator": "gte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 100,
+    },
+  },
+  "right": {
+    "operator": "lte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": Infinity,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse range with open start 1`] = `
+{
+  "field": "field",
+  "left": {
+    "operator": "gte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": -Infinity,
+    },
+  },
+  "right": {
+    "operator": "lte",
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": 100,
+    },
+  },
+  "type": "range",
+}
+`;
+
+exports[`Lucene Parser > should parse regex with escaped characters 1`] = `
+{
+  "field": "field",
+  "type": "regexp",
+  "value": {
+    "type": "value",
+    "value": "\\d+\\.\\d*",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse regex with quantifier 1`] = `
+{
+  "field": "field",
+  "type": "regexp",
+  "value": {
+    "type": "value",
+    "value": "\\d{2,4}",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse simple query 1`] = `
+{
+  "field": null,
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "query",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse simple query with ! 1`] = `
+{
+  "field": null,
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "query",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse single character wildcard 1`] = `
+{
+  "field": "field",
+  "type": "wildcard",
+  "value": {
+    "type": "value",
+    "value": "?oo",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse single character wildcard in field name 1`] = `
+{
+  "field": "field?name",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse slash in phrase 1`] = `
+{
+  "field": "field",
+  "quoted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo/bar",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse trailing wildcard 1`] = `
+{
+  "field": "field",
+  "type": "wildcard",
+  "value": {
+    "type": "value",
+    "value": "foo*",
+  },
+}
+`;
+
+exports[`Lucene Parser > should parse uppercase field names 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "TITLE",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "Foo",
+          },
+        },
+        {
+          "field": "BODY",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "Bar",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse variable reference 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "title",
+          "type": "term",
+          "value": {
+            "scoped": false,
+            "type": "variable",
+            "value": "refTitle",
+          },
+        },
+        {
+          "type": "term",
+          "value": {
+            "scoped": false,
+            "type": "variable",
+            "value": "refTitle",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse wildcard in field name 1`] = `
+{
+  "field": "field*",
+  "quoted": false,
+  "restricted": true,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "foo",
+  },
+}
+`;

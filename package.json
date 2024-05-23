@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "prebuild": "node ./scripts/generate-engine.js",
+    "build": "tsc --build",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-v8": "^1.6.0",
+    "ts-pegjs": "^4.2.1",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
