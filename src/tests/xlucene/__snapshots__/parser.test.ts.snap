@@ -1642,6 +1642,17 @@ exports[`Lucene Parser > should parse plus sign in term 1`] = `
 }
 `;
 
+exports[`Lucene Parser > should parse positive number 1`] = `
+{
+  "field": "price",
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": 20,
+  },
+}
+`;
+
 exports[`Lucene Parser > should parse query with Chinese characters 1`] = `
 {
   "field": "title",
@@ -1834,6 +1845,22 @@ exports[`Lucene Parser > should parse simple query with ! 1`] = `
     "type": "value",
     "value": "query",
   },
+}
+`;
+
+exports[`Lucene Parser > should parse simple query with NOT 1`] = `
+{
+  "node": {
+    "field": null,
+    "quoted": false,
+    "restricted": true,
+    "type": "term",
+    "value": {
+      "type": "value",
+      "value": "query",
+    },
+  },
+  "type": "negation",
 }
 `;
 

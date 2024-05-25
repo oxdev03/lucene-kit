@@ -1,7 +1,7 @@
 export default [
   // Simple Queries
   { query: 'query', description: 'simple query' },
-  { query: 'query', description: 'simple query with !' },
+  { query: 'NOT query', description: 'simple query with NOT' },
   { query: 'anotherQuery', description: 'another simple query' },
 
   // Edge Cases
@@ -89,6 +89,7 @@ export default [
   { query: 'price:>=10', description: 'greater than or equal to' },
   { query: 'price:<=20', description: 'less than or equal to' },
   { query: 'price:-20', description: 'negative number' },
+  { query: 'price:20', description: 'positive number' },
 
   // Date Fields
   { query: 'date:[2020-01-01 TO 2021-01-01]', description: 'date range' },

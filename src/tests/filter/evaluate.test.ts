@@ -1,7 +1,7 @@
 import { describe, expect, it, test } from 'vitest';
-import { evaluateAST } from '../../../filter/query/evaluate';
-import QueryParser from '../../../filter/query';
-import personData from '../../__fixtures__/data-person';
+import { evaluateAST } from '../../filter/evaluate';
+import QueryParser from '../../filter/query';
+import personData from '../__fixtures__/data-person';
 
 describe('filter with OR,AND,NOT', () => {
   type Test = {
