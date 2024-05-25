@@ -14,6 +14,9 @@ export function testString(value: FlatType, filter: string | number, quoted: boo
   throw new Error(`Test String ${value} with filter ${filter} not covered`);
 }
 
-export function testRegexp(value: FlatType, filter: string) {
-  return false;
+export function testRegexp(value: FlatType, filter: RegExp) {
+  if (value == undefined || value == null) {
+    return false;
+  }
+  return filter.test(String(value));
 }

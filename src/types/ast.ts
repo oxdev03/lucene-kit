@@ -99,7 +99,7 @@ export interface Term extends AnyDataType, TermLikeNode {
   type: NodeType.Term;
 }
 
-export interface Regexp extends StringDataType, TermLikeNode {
+export interface Regexp extends RegexpDataType, TermLikeNode {
   type: NodeType.Regexp;
 }
 
@@ -126,6 +126,10 @@ export interface StringDataType {
   value: FieldValue<string>;
   quoted: boolean;
   restricted?: boolean;
+}
+
+export interface RegexpDataType {
+  value: FieldValueValue<RegExp>;
 }
 
 export interface BooleanDataType {

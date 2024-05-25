@@ -450,7 +450,7 @@ RegexpType
             type: NodeType.Regexp,
             value: {
                 type: 'value',
-                value
+                value: new RegExp(value)
             }
         }
     }

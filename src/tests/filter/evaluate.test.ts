@@ -293,3 +293,60 @@ describe('filter with OR,AND,NOT', () => {
     });
   });
 });
+
+describe('filter with Regex', () => {
+  type Test = {
+    group: 'simple' | 'escaped' | 'nested';
+    desc: string;
+    query: string;
+    expected: (p: (typeof personData)[0]) => boolean;
+  };
+
+  const tests: Test[] = [
+    {
+      group: 'simple',
+      desc: 'Simple Test 1 with Regex',
+      query: 'gender:/Male|Female/ AND age:30',
+      expected: (p) => /Male|Female/.test(p.gender) && p.age === 30,
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Test 2 with Regex',
+      query: 'lastName:/^A/ AND age:38',
+      expected: (p) => /^A/.test(p.lastName) && p.age === 38,
+    },
+    {
+      group: 'escaped',
+      desc: 'Escaped Regex Test 1',
+      query: '/\.com$/',
+      expected: (p) => /\.com$/.test(p.email || ""),
+    },
+    {
+      group: 'escaped',
+      desc: 'Escaped Regex Test 2',
+      query: 'lastName:/^D.*e$/',
+      expected: (p) => /^D.*e$/.test(p.lastName),
+    },
+    {
+      group: 'nested',
+      desc: 'Nested Regex Test 1',
+      query: 'gender:/^(Male|Female|Non-binary)$/ AND email:/@/ AND age:/^3[0-9]$/',
+      expected: (p) =>
+        /^(Male|Female|Non-binary)$/.test(p.gender) && /@/.test(p.email || "") && /^3[0-9]$/.test(p.age.toString()),
+    },
+    {
+      group: 'nested',
+      desc: 'Nested Regex Test 2',
+      query: 'gender:/^(Male|Female)$/ AND lastName:/^H.*e$/',
+      expected: (p) => /^(Male|Female)$/.test(p.gender) && /^H.*e$/.test(p.lastName),
+    },
+  ];
+
+  tests.forEach((t) => {
+    it(`should ${t.desc}`, () => {
+      const result = evaluateAST(new QueryParser(t.query).toAST(), personData);
+      expect(result).toEqual(personData.filter(t.expected));
+      expect(result.length).toMatchSnapshot();
+    });
+  });
+});

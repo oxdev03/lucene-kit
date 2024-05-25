@@ -261,7 +261,7 @@ exports[`Lucene Parser > should parse basic regex 1`] = `
   "type": "regexp",
   "value": {
     "type": "value",
-    "value": "[a-z]+",
+    "value": /\\[a-z\\]\\+/,
   },
 }
 `;
@@ -1806,7 +1806,7 @@ exports[`Lucene Parser > should parse regex with escaped characters 1`] = `
   "type": "regexp",
   "value": {
     "type": "value",
-    "value": "\\d+\\.\\d*",
+    "value": /\\\\d\\+\\\\\\.\\\\d\\*/,
   },
 }
 `;
@@ -1817,25 +1817,12 @@ exports[`Lucene Parser > should parse regex with quantifier 1`] = `
   "type": "regexp",
   "value": {
     "type": "value",
-    "value": "\\d{2,4}",
+    "value": /\\\\d\\{2,4\\}/,
   },
 }
 `;
 
 exports[`Lucene Parser > should parse simple query 1`] = `
-{
-  "field": null,
-  "quoted": false,
-  "restricted": true,
-  "type": "term",
-  "value": {
-    "type": "value",
-    "value": "query",
-  },
-}
-`;
-
-exports[`Lucene Parser > should parse simple query with ! 1`] = `
 {
   "field": null,
   "quoted": false,

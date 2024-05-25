@@ -1,6 +1,14 @@
 import { Conjunction, LogicalGroup, Negation, Node, NodeType, Term, TermLikeNode } from '../types/ast';
-import { isConjunction, isLogicalGroup, isNegation, isStringDataType, isTerm, isTermType } from '../types/guards';
-import { testString } from './test-value';
+import {
+  isConjunction,
+  isLogicalGroup,
+  isNegation,
+  isRegexp,
+  isStringDataType,
+  isTerm,
+  isTermType,
+} from '../types/guards';
+import { testRegexp, testString } from './test-value';
 
 export function evaluateAST(node: Node, data: any[]): any[] {
   if (!node) return data;
@@ -40,6 +48,8 @@ function matchTermLike(node: TermLikeNode, item: any): boolean {
   function testValue(value: string): boolean {
     if (isTerm(node)) {
       return testString(value, node.value.value, isStringDataType(node) ? node.quoted : false);
+    } else if (isRegexp(node)) {
+      return testRegexp(value, node.value.value);
     }
 
     return false;

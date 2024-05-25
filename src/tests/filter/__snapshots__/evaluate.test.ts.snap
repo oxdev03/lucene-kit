@@ -79,3 +79,15 @@ exports[`filter with OR,AND,NOT > should Simple Test 8 (Negation, Grouping) 1`] 
 exports[`filter with OR,AND,NOT > should Simple Test 9 (AND, Negation) 1`] = `44`;
 
 exports[`filter with OR,AND,NOT > should Simple Test 10 (OR, Negation) 1`] = `99`;
+
+exports[`filter with Regex > should Escaped Regex Test 1 1`] = `60`;
+
+exports[`filter with Regex > should Escaped Regex Test 2 1`] = `1`;
+
+exports[`filter with Regex > should Nested Regex Test 1 1`] = `12`;
+
+exports[`filter with Regex > should Nested Regex Test 2 1`] = `1`;
+
+exports[`filter with Regex > should Simple Test 1 with Regex 1`] = `2`;
+
+exports[`filter with Regex > should Simple Test 2 with Regex 1`] = `1`;

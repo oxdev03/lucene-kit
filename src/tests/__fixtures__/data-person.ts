@@ -166,7 +166,7 @@ export default [
   { id: 95, gender: 'Agender', firstName: 'Lilas', lastName: 'Langdridge', age: 71, email: 'llangdridge2m@phoca.cz' },
   { id: 96, gender: 'Male', firstName: 'Palm', lastName: 'Royl', age: 58, email: 'proyl2n@loc.gov' },
   { id: 97, gender: 'Female', firstName: 'Nicky', lastName: 'Palffrey', age: 12, email: 'npalffrey2o@aol.com' },
-  { id: 98, gender: 'Male', firstName: 'Otho', lastName: 'Bevans', age: 49, email: 'obevans2p@examiner.com' },
+  { id: 98, gender: 'Male', firstName: 'Otho', lastName: 'Bevans', age: 49, email: null },
   { id: 99, gender: 'Female', firstName: 'Darcie', lastName: 'Whiskin', age: 61, email: 'dwhiskin2q@cloudflare.com' },
-  { id: 100, gender: 'Male', firstName: 'Symon', lastName: 'Royste', age: 68, email: 'sroyste2r@google.ca' },
+  { id: 100, gender: 'Male', firstName: 'Symon', lastName: 'Royste', age: 68, email: undefined },
 ];
