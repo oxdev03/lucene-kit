@@ -20,3 +20,13 @@ export function testRegexp(value: FlatType, filter: RegExp) {
   }
   return filter.test(String(value));
 }
+
+export function testWildcard(value: FlatType, filter: string): boolean {
+  const regexPattern = escapeRegExp(filter).replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+  const regex = new RegExp(`^${regexPattern}$`);
+  return testRegexp(value, regex);
+}
+
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

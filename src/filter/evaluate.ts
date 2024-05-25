@@ -9,8 +9,9 @@ import {
   isStringDataType,
   isTerm,
   isTermType,
+  isWildcard,
 } from '../types/guards';
-import { testRegexp, testString } from './test-value';
+import { testRegexp, testString, testWildcard } from './test-value';
 
 export function evaluateAST(node: Node, data: any[]): any[] {
   if (!node) return data;
@@ -52,6 +53,8 @@ function matchTermLike(node: TermLikeNode, item: any): boolean {
       return testString(value, node.value.value, isStringDataType(node) ? node.quoted : false);
     } else if (isRegexp(node)) {
       return testRegexp(value, node.value.value);
+    } else if (isWildcard(node)) {
+      return testWildcard(value, node.value.value);
     }
 
     return false;
