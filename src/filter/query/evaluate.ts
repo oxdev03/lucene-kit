@@ -1,10 +1,10 @@
 import { Conjunction, LogicalGroup, Negation, Node, NodeType, Term } from '../../types/ast';
 import { isConjunction, isLogicalGroup, isNegation, isTerm } from '../../types/guards';
 
-export function evaluateAST(node: Node, data: any[]) {
+export function evaluateAST(node: Node, data: any[]): any[] {
   if (!node) return data;
 
-  console.log(node,data);
+  //console.log(node, data);
 
   if (isLogicalGroup(node)) {
     return evaluateLogicalGroup(node, data);
@@ -15,14 +15,27 @@ export function evaluateAST(node: Node, data: any[]) {
   } else if (isTerm(node)) {
     return evaluateTerm(node, data);
   }
+
+  console.error(`${node.type} can't be evaluated`);
+  return data;
 }
 
 function evaluateLogicalGroup(node: LogicalGroup, data: any[]) {
-  let result = data;
+  let result: any[] = [];
+  let indices = new Set<number>();
+  
   for (const subNode of node.flow) {
-    result = evaluateAST(subNode, result);
+    const subResult = evaluateAST(subNode, data);
+    for (const item of subResult) {
+      const index = data.indexOf(item);
+      if (!indices.has(index)) {
+        indices.add(index);
+        result.push(item);
+      }
+    }
   }
-  return result;
+  
+  return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
 }
 
 function evaluateTerm(node: Term, data: any[]) {
