@@ -22,19 +22,12 @@ export function evaluateAST(node: Node, data: any[]): any[] {
 
 function evaluateLogicalGroup(node: LogicalGroup, data: any[]) {
   let result: any[] = [];
-  let indices = new Set<number>();
-  
+
   for (const subNode of node.flow) {
     const subResult = evaluateAST(subNode, data);
-    for (const item of subResult) {
-      const index = data.indexOf(item);
-      if (!indices.has(index)) {
-        indices.add(index);
-        result.push(item);
-      }
-    }
+    result.push(...subResult.filter((r) => !result.includes(r)));
   }
-  
+
   return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
 }
 

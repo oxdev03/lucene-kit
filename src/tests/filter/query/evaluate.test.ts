@@ -287,9 +287,7 @@ describe('filter with OR,AND,NOT', () => {
 
   tests.forEach((t) => {
     it(`should ${t.desc}`, () => {
-      console.time(t.desc)
       const result = evaluateAST(new QueryParser(t.query).toAST(), personData);
-      console.timeEnd(t.desc)
       expect(result).toEqual(personData.filter(t.expected));
       expect(result.length).toMatchSnapshot();
     });
