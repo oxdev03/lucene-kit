@@ -21,7 +21,7 @@ function generate() {
         format: 'commonjs',
         tspegjs: {
             noTslint: true,
-            customHeader: `//@ts-nocheck\nimport { propagateDefaultField, validateScopedChars } from "./helpers";\nimport { NodeType } from "./types/interfaces";`
+            customHeader: `//@ts-nocheck\nimport { propagateDefaultField, validateScopedChars } from "./helpers";\nimport { NodeType } from "../types/ast";`
         },
     });
 
