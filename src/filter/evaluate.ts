@@ -1,6 +1,8 @@
-import { Conjunction, LogicalGroup, Negation, Node, NodeType, Term, TermLikeNode } from '../types/ast';
+import { Conjunction, GroupLikeNode, LogicalGroup, Negation, Node, NodeType, Term, TermLikeNode } from '../types/ast';
 import {
   isConjunction,
+  isFieldGroup,
+  isGroupLike,
   isLogicalGroup,
   isNegation,
   isRegexp,
@@ -15,7 +17,7 @@ export function evaluateAST(node: Node, data: any[]): any[] {
 
   //console.log(node, data);
 
-  if (isLogicalGroup(node)) {
+  if (isGroupLike(node)) {
     return evaluateLogicalGroup(node, data);
   } else if (isConjunction(node)) {
     return evaluateConjunction(node, data);
@@ -29,7 +31,7 @@ export function evaluateAST(node: Node, data: any[]): any[] {
   return data;
 }
 
-function evaluateLogicalGroup(node: LogicalGroup, data: any[]) {
+function evaluateLogicalGroup(node: GroupLikeNode, data: any[]) {
   let result: any[] = [];
 
   for (const subNode of node.flow) {

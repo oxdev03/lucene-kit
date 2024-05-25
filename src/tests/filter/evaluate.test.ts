@@ -294,6 +294,111 @@ describe('filter with OR,AND,NOT', () => {
   });
 });
 
+describe('filter with field groups', () => {
+  type Test = {
+    group: 'simple' | 'multi' | 'complex' | 'nested';
+    desc: string;
+    query: string;
+    expected: (p: (typeof personData)[0]) => boolean;
+  };
+
+  const simpleTests: Test[] = [
+    {
+      group: 'simple',
+      desc: 'Simple Test 1 with Lucene Grouping',
+      query: 'gender:(Male Female)',
+      expected: (p) => p.gender === 'Male' || p.gender === 'Female',
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Test 2 with Lucene Grouping and OR',
+      query: 'age:(30 OR 40)',
+      expected: (p) => p.age === 30 || p.age === 40,
+    },
+  ];
+
+  const multiTests: Test[] = [
+    {
+      group: 'multi',
+      desc: 'Multi Field Test 1 with Lucene Grouping and AND',
+      query: 'gender:(/a/ AND /le/)',
+      expected: (p) => p.gender === 'Male' || p.gender === 'Female',
+    },
+    {
+      group: 'multi',
+      desc: 'Multi Field Test 2 with Lucene Grouping and OR',
+      query: 'gender:(Non-binary OR Genderfluid) AND age:(15 OR 17)',
+      expected: (p) => (p.gender === 'Non-binary' || p.gender === 'Genderfluid') && (p.age === 15 || p.age === 17),
+    },
+  ];
+
+  const complexTests: Test[] = [
+    {
+      group: 'complex',
+      desc: 'Complex Grouping Test 1 with Lucene Grouping',
+      query: 'gender:(Male OR Female) AND email:/@gmail.com$/',
+      expected: (p) =>
+        (p.gender === 'Male' || p.gender === 'Female') && String(p.email).endsWith('@gmail.com'),
+    },
+    {
+      group: 'complex',
+      desc: 'Complex Grouping Test 2 with Lucene Grouping',
+      query:
+        '(gender:(Male OR Female) OR gender:(Non-binary OR Genderfluid)) AND lastName:(/^A/ OR /^B/)',
+      expected: (p) =>
+        ['Male', 'Female', 'Non-binary', 'Genderfluid'].includes(p.gender) &&
+        (/^A/.test(p.lastName) || /^B/.test(p.lastName)),
+    },
+    {
+      group: 'complex',
+      desc: 'Complex Grouping Test 3 with Lucene Grouping',
+      query: 'firstName:(/^A/ OR /^B/) AND lastName:(/^C/ OR /^D/)',
+      expected: (p) =>
+        (/^A/.test(p.firstName) || /^B/.test(p.firstName)) &&
+        (/^C/.test(p.lastName) || /^D/.test(p.lastName))
+    },
+    {
+      group: 'complex',
+      desc: 'Complex Grouping Test 4 with Lucene Grouping',
+      query:
+        '(firstName:(Ambrose OR Brandon) AND lastName:(Harpur OR Dunbleton)) OR (firstName:(Corette OR Kaleena) AND lastName:(Bannard OR Eady))',
+      expected: (p) =>
+        (p.firstName === 'Ambrose' && p.lastName === 'Harpur') ||
+        (p.firstName === 'Brandon' && p.lastName === 'Dunbleton') ||
+        (p.firstName === 'Corette' && p.lastName === 'Bannard') ||
+        (p.firstName === 'Kaleena' && p.lastName === 'Eady'),
+    },
+  ];
+
+  const nestedTests: Test[] = [
+    {
+      group: 'nested',
+      desc: 'Nested Grouping Test 1 with Lucene Grouping',
+      query: '(gender:(Male OR Female) OR gender:(Non-binary OR Genderfluid)) AND age:(30 OR 40)',
+      expected: (p) =>
+        ['Male', 'Female', 'Non-binary', 'Genderfluid'].includes(p.gender) && (p.age === 30 || p.age === 40),
+    },
+    {
+      group: 'nested',
+      desc: 'Nested Grouping Test 2 with Lucene Grouping',
+      query: 'gender:(Male OR Female) AND (age:(20 OR 25) OR age:(30 OR 35))',
+      expected: (p) =>
+        (p.gender === 'Male' || p.gender === 'Female') &&
+        (p.age === 20 || p.age === 25 || p.age === 30 || p.age === 35),
+    },
+  ];
+
+  const tests: Test[] = [...simpleTests, ...multiTests, ...complexTests, ...nestedTests];
+
+  tests.forEach((t) => {
+    it(`should ${t.desc}`, () => {
+      const result = evaluateAST(new QueryParser(t.query).toAST(), personData);
+      expect(result).toEqual(personData.filter(t.expected));
+      expect(result.length).toMatchSnapshot();
+    });
+  });
+});
+
 describe('filter with Regex', () => {
   type Test = {
     group: 'simple' | 'escaped' | 'nested';
@@ -318,8 +423,8 @@ describe('filter with Regex', () => {
     {
       group: 'escaped',
       desc: 'Escaped Regex Test 1',
-      query: '/\.com$/',
-      expected: (p) => /\.com$/.test(p.email || ""),
+      query: '/.com$/',
+      expected: (p) => /\.com$/.test(p.email || ''),
     },
     {
       group: 'escaped',
@@ -332,7 +437,7 @@ describe('filter with Regex', () => {
       desc: 'Nested Regex Test 1',
       query: 'gender:/^(Male|Female|Non-binary)$/ AND email:/@/ AND age:/^3[0-9]$/',
       expected: (p) =>
-        /^(Male|Female|Non-binary)$/.test(p.gender) && /@/.test(p.email || "") && /^3[0-9]$/.test(p.age.toString()),
+        /^(Male|Female|Non-binary)$/.test(p.gender) && /@/.test(p.email || '') && /^3[0-9]$/.test(p.age.toString()),
     },
     {
       group: 'nested',
