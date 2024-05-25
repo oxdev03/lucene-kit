@@ -311,9 +311,9 @@ describe('filter with Regex', () => {
     },
     {
       group: 'simple',
-      desc: 'Simple Test 2 with Regex',
-      query: 'lastName:/^A/ AND age:38',
-      expected: (p) => /^A/.test(p.lastName) && p.age === 38,
+      desc: 'Simple Test 2 with Regex flags',
+      query: 'lastName:/^a/i AND age:38',
+      expected: (p) => /^a/i.test(p.lastName) && p.age === 38,
     },
     {
       group: 'escaped',

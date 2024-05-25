@@ -987,6 +987,18 @@ exports[`Lucene Parser > should parse mixed case field names 1`] = `
 }
 `;
 
+exports[`Lucene Parser > should parse multiple query 1`] = `
+{
+  "field": null,
+  "quoted": false,
+  "type": "term",
+  "value": {
+    "type": "value",
+    "value": "this is a query",
+  },
+}
+`;
+
 exports[`Lucene Parser > should parse negative number 1`] = `
 {
   "field": "price",
@@ -1811,6 +1823,17 @@ exports[`Lucene Parser > should parse regex with escaped characters 1`] = `
 }
 `;
 
+exports[`Lucene Parser > should parse regex with flags 1`] = `
+{
+  "field": "field",
+  "type": "regexp",
+  "value": {
+    "type": "value",
+    "value": /test\\.\\*/i,
+  },
+}
+`;
+
 exports[`Lucene Parser > should parse regex with quantifier 1`] = `
 {
   "field": "field",
@@ -1819,6 +1842,78 @@ exports[`Lucene Parser > should parse regex with quantifier 1`] = `
     "type": "value",
     "value": /\\\\d\\{2,4\\}/,
   },
+}
+`;
+
+exports[`Lucene Parser > should parse regex without flags 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "field",
+          "type": "regexp",
+          "value": {
+            "type": "value",
+            "value": /test\\.\\*/,
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": null,
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "continuing",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
+exports[`Lucene Parser > should parse regex without flags continuation 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": "field",
+          "type": "regexp",
+          "value": {
+            "type": "value",
+            "value": /test/,
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": null,
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "gm",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
 }
 `;
 

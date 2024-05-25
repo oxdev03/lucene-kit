@@ -90,4 +90,4 @@ exports[`filter with Regex > should Nested Regex Test 2 1`] = `1`;
 
 exports[`filter with Regex > should Simple Test 1 with Regex 1`] = `2`;
 
-exports[`filter with Regex > should Simple Test 2 with Regex 1`] = `1`;
+exports[`filter with Regex > should Simple Test 2 with Regex flags 1`] = `1`;

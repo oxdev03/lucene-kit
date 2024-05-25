@@ -445,12 +445,12 @@ BooleanType
   }
 
 RegexpType
-    = value:Regex {
+    = value:Regex flags:RegexFlags? {
         return {
             type: NodeType.Regexp,
             value: {
                 type: 'value',
-                value: new RegExp(value)
+                value: new RegExp(value, flags.join(''))
             }
         }
     }
@@ -523,6 +523,9 @@ Wildcard
 
 Regex
   = '/' chars:RegexStringChar* '/' { return chars.join(''); }
+
+RegexFlags
+    = [gimsuy]* { return text().split(''); }
 
 Integer
    = int:$(Zero / OneToNine Digit*) &NumReservedChar { return parseInt(int, 10); }

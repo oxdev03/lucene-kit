@@ -3,6 +3,7 @@ export default [
   { query: 'query', description: 'simple query' },
   { query: 'NOT query', description: 'simple query with NOT' },
   { query: 'anotherQuery', description: 'another simple query' },
+  { query: 'this is a query', description: 'multiple query' },
 
   // Edge Cases
   { query: '', description: 'empty query' },
@@ -51,6 +52,8 @@ export default [
   { query: 'field:/[a-z]+/', description: 'basic regex' },
   { query: 'field:/\\d{2,4}/', description: 'regex with quantifier' },
   { query: 'field:/\\d+\\.\\d*/', description: 'regex with escaped characters' },
+  { query: 'field:/test.*/i', description: 'regex with flags' },
+  { query: 'field:/test/ gm', description: 'regex without flags continuation' },
 
   // Combinations and Complex Cases
   { query: 'title:foo AND (bar OR baz) AND -qux', description: 'AND with grouped OR and NOT' },
