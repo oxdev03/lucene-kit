@@ -92,11 +92,13 @@ exports[`filter with Regex > should Simple Test 1 with Regex 1`] = `2`;
 
 exports[`filter with Regex > should Simple Test 2 with Regex flags 1`] = `1`;
 
-exports[`filter with Wildcard > should Complex Wildcard Field Test 1 1`] = `0`;
+exports[`filter with Wildcard > should Complex Wildcard Field Test 1 1`] = `1`;
 
 exports[`filter with Wildcard > should Complex Wildcard Field Test 2 1`] = `1`;
 
 exports[`filter with Wildcard > should Complex Wildcard Field Test 3 1`] = `1`;
+
+exports[`filter with Wildcard > should Simple Wildcard Field Test 1 1`] = `12`;
 
 exports[`filter with Wildcard > should Simple Wildcard Field Test 2 1`] = `1`;
 

@@ -1,9 +1,7 @@
 import { Conjunction, GroupLikeNode, LogicalGroup, Negation, Node, NodeType, Term, TermLikeNode } from '../types/ast';
 import {
   isConjunction,
-  isFieldGroup,
   isGroupLike,
-  isLogicalGroup,
   isNegation,
   isRegexp,
   isStringDataType,
@@ -11,6 +9,7 @@ import {
   isTermType,
   isWildcard,
 } from '../types/guards';
+import iterate from '../utils/iterate';
 import { testRegexp, testString, testWildcard } from './test-value';
 
 export function evaluateAST(node: Node, data: any[]): any[] {
@@ -60,38 +59,10 @@ function matchTermLike(node: TermLikeNode, item: any): boolean {
     return false;
   }
 
-  // Check if the field is specified and exists in the item
-  if (node.field && typeof item === 'object' && item[node.field] != null) {
-    const fields = node.field.split('.'); // Support nested fields
-    let fieldValue = item;
-    for (const field of fields) {
-      if (fieldValue[field] != null) {
-        fieldValue = fieldValue[field];
-      } else {
-        return false; // Field does not exist
-      }
+  for (const [_field, value] of iterate(item, node.field || '')) {
+    if (testValue(value)) {
+      return true;
     }
-
-    // If the field value is an array, check each element
-    if (Array.isArray(fieldValue)) {
-      return fieldValue.some(testValue); // Support field inside array
-    } else {
-      return testValue(fieldValue);
-    }
-  }
-
-  // If the field is not specified or doesn't exist, iterate over the whole item
-  if (typeof item === 'object') {
-    for (const key in item) {
-      if (Object.prototype.hasOwnProperty.call(item, key)) {
-        if (testValue(item[key])) {
-          return true;
-        }
-      }
-    }
-  } else {
-    // Handle cases where item is a primitive type like string, number, etc.
-    return testValue(item);
   }
 
   return false;
