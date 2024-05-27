@@ -22,21 +22,25 @@ export default function* iterate(
     if (depth > maxDepth) return;
 
     const currentField = splittedFields[currentPath.length];
+    const lastField = splittedFields.length ? splittedFields[splittedFields.length - 1] : '';
+    const isTrailingWildcard = lastField?.endsWith('*') && !currentField;
     const isWildcard = isWildCardString(currentField);
 
-    if (typeof obj === 'object') {
-      for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          if ((isWildcard ? testWildcard(key, currentField) : key === currentField) || field == '') {
-            const newPath = currentPath.concat(key);
-
-            yield* _iterate(obj[key], newPath, depth + 1);
-          } else {
-            //console.error(currentField, obj, 'test');
+    if (typeof obj === 'object' && obj !== null) {
+      if (!isWildcard && obj.hasOwnProperty(currentField)) {
+        const newPath = currentPath.concat(currentField);
+        yield* _iterate(obj[currentField], newPath, depth + 1);
+      } else {
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            if (!field || (currentField && testWildcard(key, currentField)) || isTrailingWildcard) {
+              const newPath = currentPath.concat(key);
+              yield* _iterate(obj[key], newPath, depth + 1);
+            }
           }
         }
       }
-    } else {
+    } else if (currentPath.length === splittedFields.length || isTrailingWildcard || !field) {
       yield [currentPath.join('.'), obj];
     }
   }

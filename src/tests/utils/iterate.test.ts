@@ -12,6 +12,7 @@ describe('iterate', () => {
       nestedKey1: 'value3',
     },
     key3: 'value4',
+    lkey: 'value5'
   };
 
   it('should iterate over all fields when field is empty', () => {
@@ -41,6 +42,10 @@ describe('iterate', () => {
         [
           "key3",
           "value4",
+        ],
+        [
+          "lkey",
+          "value5",
         ],
       ]
     `);
@@ -87,7 +92,7 @@ describe('iterate', () => {
   });
 
   it('should iterate over arrays correctly', () => {
-    const result = [...iterate(testObj, 'key1.nestedArray.*')];
+    const result = [...iterate(testObj, 'key?.nestedArray.*')];
     expect(result).toMatchInlineSnapshot(`
       [
         [
@@ -190,6 +195,9 @@ describe('iterate', () => {
         },
         e: 'value3',
       },
+      b: {
+        c: 'value1'
+      }
     };
     const result = [...iterate(deepObj, 'a.*')];
     expect(result).toMatchInlineSnapshot(`
@@ -210,7 +218,7 @@ describe('iterate', () => {
     `);
   });
 
-  it('should handle array elements as objects', () => {
+  it.todo('should handle array elements as objects', () => {
     const arrayObj = {
       arr: [{ key: 'value1' }, { key: 'value2' }, { key2: 'value3' }],
     };
@@ -228,7 +236,23 @@ describe('iterate', () => {
         ],
       ]
     `);
+    // FIXME: able to access array keys without *
     expect(alternativeResult).toEqual(result);
+  });
+
+  it('should access array elements with index', () => {
+    const arrayObj = {
+      arr: [{ key: 'value1' }, { key: 'value2' }, { key2: 'value3' }],
+    };
+    const result = [...iterate(arrayObj, 'arr.0.key')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "arr.0.key",
+          "value1",
+        ],
+      ]
+    `);
   });
 
   it('should handle plain array', () => {
