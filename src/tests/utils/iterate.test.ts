@@ -12,7 +12,7 @@ describe('iterate', () => {
       nestedKey1: 'value3',
     },
     key3: 'value4',
-    lkey: 'value5'
+    lkey: 'value5',
   };
 
   it('should iterate over all fields when field is empty', () => {
@@ -196,8 +196,8 @@ describe('iterate', () => {
         e: 'value3',
       },
       b: {
-        c: 'value1'
-      }
+        c: 'value1',
+      },
     };
     const result = [...iterate(deepObj, 'a.*')];
     expect(result).toMatchInlineSnapshot(`
@@ -272,5 +272,29 @@ describe('iterate', () => {
       ]
     `);
     expect(alternativeResult).toEqual(result);
+  });
+
+  it('should follow max depth', () => {
+    const deepObj = {
+      a: {
+        b: {
+          c: 'value1',
+          d: 'value2',
+        },
+        e: 'value3',
+      },
+      b: {
+        c: 'value1',
+      },
+    };
+    const result = [...iterate(deepObj, 'a.*', 3)];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "a.e",
+          "value3",
+        ],
+      ]
+    `);
   });
 });
