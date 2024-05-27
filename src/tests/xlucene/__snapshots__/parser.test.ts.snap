@@ -721,6 +721,44 @@ exports[`Lucene Parser > should parse field with no value 1`] = `
 }
 `;
 
+exports[`Lucene Parser > should parse fields with symbols 1`] = `
+{
+  "flow": [
+    {
+      "nodes": [
+        {
+          "field": null,
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "+title:foo",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+    {
+      "nodes": [
+        {
+          "field": "-body",
+          "quoted": false,
+          "restricted": true,
+          "type": "term",
+          "value": {
+            "type": "value",
+            "value": "bar",
+          },
+        },
+      ],
+      "type": "conjunction",
+    },
+  ],
+  "type": "logical-group",
+}
+`;
+
 exports[`Lucene Parser > should parse greater than or equal to 1`] = `
 {
   "field": "price",

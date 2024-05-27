@@ -58,7 +58,7 @@ export default [
   // Combinations and Complex Cases
   { query: 'title:foo AND (bar OR baz) AND -qux', description: 'AND with grouped OR and NOT' },
   { query: '((title:foo AND body:bar) OR (title:baz AND body:qux))', description: 'complex nested groups' },
-  { query: '+title:foo -body:bar', description: 'mandatory and prohibited terms' },
+  { query: '+title:foo -body:bar', description: 'fields with symbols' },
   { query: '_exists_:title', description: 'exists query' },
   { query: '_missing_:title', description: 'missing query' },
 
