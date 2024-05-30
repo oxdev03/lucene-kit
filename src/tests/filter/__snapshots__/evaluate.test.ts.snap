@@ -140,11 +140,7 @@ exports[`filter with variables > should Simple Global Variable Test 1 1`] = `2`;
 
 exports[`filter with variables > should Simple Global Variable Test 2 1`] = `0`;
 
-exports[`filter with variables > should Simple Global Variable Test 2 2`] = `0`;
-
 exports[`filter with variables > should Simple Global Variable Test 3 1`] = `3`;
-
-exports[`filter with variables > should Simple Global Variable Test 3 2`] = `20`;
 
 exports[`filter with variables > should Simple Global Variable Test 4 1`] = `20`;
 

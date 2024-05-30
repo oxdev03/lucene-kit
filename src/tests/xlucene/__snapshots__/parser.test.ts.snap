@@ -930,44 +930,6 @@ exports[`Lucene Parser > should parse less than or equal to 1`] = `
 }
 `;
 
-exports[`Lucene Parser > should parse mandatory and prohibited terms 1`] = `
-{
-  "flow": [
-    {
-      "nodes": [
-        {
-          "field": null,
-          "quoted": false,
-          "restricted": true,
-          "type": "term",
-          "value": {
-            "type": "value",
-            "value": "+title:foo",
-          },
-        },
-      ],
-      "type": "conjunction",
-    },
-    {
-      "nodes": [
-        {
-          "field": "-body",
-          "quoted": false,
-          "restricted": true,
-          "type": "term",
-          "value": {
-            "type": "value",
-            "value": "bar",
-          },
-        },
-      ],
-      "type": "conjunction",
-    },
-  ],
-  "type": "logical-group",
-}
-`;
-
 exports[`Lucene Parser > should parse match all query 1`] = `
 {
   "field": "*",
@@ -1880,42 +1842,6 @@ exports[`Lucene Parser > should parse regex with quantifier 1`] = `
     "type": "value",
     "value": /\\\\d\\{2,4\\}/,
   },
-}
-`;
-
-exports[`Lucene Parser > should parse regex without flags 1`] = `
-{
-  "flow": [
-    {
-      "nodes": [
-        {
-          "field": "field",
-          "type": "regexp",
-          "value": {
-            "type": "value",
-            "value": /test\\.\\*/,
-          },
-        },
-      ],
-      "type": "conjunction",
-    },
-    {
-      "nodes": [
-        {
-          "field": null,
-          "quoted": false,
-          "restricted": true,
-          "type": "term",
-          "value": {
-            "type": "value",
-            "value": "continuing",
-          },
-        },
-      ],
-      "type": "conjunction",
-    },
-  ],
-  "type": "logical-group",
 }
 `;
 
