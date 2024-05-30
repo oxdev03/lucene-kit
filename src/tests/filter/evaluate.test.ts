@@ -508,3 +508,57 @@ describe('filter with Wildcard', () => {
     });
   });
 });
+
+describe('filter with Ranges', () => {
+  type Test = {
+    group: 'simple' | 'complex';
+    desc: string;
+    query: string;
+    expected: (p: (typeof personData)[0]) => boolean;
+  };
+
+  const tests: Test[] = [
+    {
+      group: 'simple',
+      desc: 'Simple Range Test 1',
+      query: 'age:[0 TO 30]',
+      expected: (p) => p.age >= 0 && p.age <= 30,
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Range Test 2',
+      query: 'age:[20 TO *]',
+      expected: (p) => p.age >= 20,
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Range Test 3',
+      query: 'age:>=30 && age:[* TO 60]',
+      expected: (p) => p.age >= 30 && p.age >= 0 && p.age <= 60,
+    },
+    {
+      group: 'complex',
+      desc: 'Complex Range Test 1',
+      query: '(age:>=30 && age:<=60) || (age:>19 && age:<21)',
+      expected: (p) => p.age == 20 || (p.age >= 30 && p.age <= 60),
+    },
+  ];
+
+  tests.forEach((t) => {
+    it(`should ${t.desc}`, () => {
+      const result = evaluateAST(new QueryParser(t.query).toAST(), personData);
+      expect(result).toEqual(personData.filter(t.expected));
+      expect(result.length).toMatchSnapshot();
+    });
+  });
+
+  it.todo('should Date Range Test 1', () => {
+    const query = 'date:[01-01-2022 TO 01-01-2024]'
+    const data = [
+      { id: 1, date: new Date('2023') },
+      { id: 2, date: new Date('2021') },
+    ];
+    const result = evaluateAST(new QueryParser(query).toAST(), data);
+    expect(result).toMatchInlineSnapshot(`[]`);
+  });
+});

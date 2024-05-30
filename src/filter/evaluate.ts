@@ -3,6 +3,7 @@ import {
   isConjunction,
   isGroupLike,
   isNegation,
+  isRange,
   isRegexp,
   isStringDataType,
   isTerm,
@@ -10,7 +11,7 @@ import {
   isWildcard,
 } from '../types/guards';
 import iterate from '../utils/iterate';
-import { testRegexp, testString, testWildcard } from './test-value';
+import { testRangeNode, testRegexp, testString, testWildcard } from './test-value';
 
 export function evaluateAST(node: Node, data: any[]): any[] {
   if (!node) return data;
@@ -54,6 +55,11 @@ function matchTermLike(node: TermLikeNode, item: any): boolean {
       return testRegexp(value, node.value.value);
     } else if (isWildcard(node)) {
       return testWildcard(value, node.value.value);
+    } else if (isRange(node)) {
+      return (
+        testRangeNode(node.left.operator, value, node.left.value.value) &&
+        testRangeNode(node.right?.operator, value, node?.right?.value?.value)
+      );
     }
 
     return false;

@@ -297,4 +297,46 @@ describe('iterate', () => {
       ]
     `);
   });
+
+  it('should iterate over date', () => {
+    // FIXME: class without any properties should be stringified
+    const obj = {
+      date: new Date('2024'),
+    };
+
+    const result = [...iterate(obj)];
+    expect(result).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('should iterate over class instance', () => {
+    // TODO: support iterating over class getters
+
+    const Cls = class {
+      field = 1;
+      self = this;
+      static field2() {
+        return 2;
+      }
+      field3() {
+        return 3;
+      }
+      get field4() {
+        return 4;
+      }
+    };
+
+    const result = [...iterate(new Cls(), '', 3)];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "field",
+          1,
+        ],
+        [
+          "self.field",
+          1,
+        ],
+      ]
+    `);
+  });
 });
