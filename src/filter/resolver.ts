@@ -1,9 +1,15 @@
+import { VariableNode } from "../types/ast";
+import { FlatType } from "../types/data";
+import QueryParser from "./query";
+
+type ResolverReturnType = FlatType | QueryParser;
+
 type VariableResolver = {
-  [name: string]: ((node: any, ast: any) => string) | string;
+  [name: string]: ((node: VariableNode) => ResolverReturnType ) | ResolverReturnType;
 };
 
 type FunctionResolver = {
-  [name: string]: ((params: { [key: string]: any }) => string) | ((...args: any[]) => string);
+  [name: string]: ((params: { [key: string]: any }) => ResolverReturnType) | ((...args: any[]) => ResolverReturnType);
 };
 
 export default class ReferenceResolver {

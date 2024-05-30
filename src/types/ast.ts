@@ -107,6 +107,10 @@ export interface Wildcard extends StringDataType, TermLikeNode {
   type: NodeType.Wildcard;
 }
 
+export interface VariableNode extends TermLikeNode {
+  value: FieldValueVariable
+}
+
 export interface FunctionNode extends TermLikeNode {
   type: NodeType.Function;
   name: string;

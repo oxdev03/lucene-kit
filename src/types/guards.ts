@@ -37,6 +37,10 @@ export function isWildcard(node: unknown): node is i.Wildcard {
   return _getType(node) === i.NodeType.Wildcard;
 }
 
+export function isVariableNode(node: unknown): node is i.VariableNode {
+  return isTerm(node) && node?.value?.type == 'variable';
+}
+
 export function isWildCardString(term) {
   if (typeof term !== 'string') return false;
   if (term.includes('*') || term.includes('?')) return true;

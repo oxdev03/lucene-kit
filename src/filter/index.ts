@@ -1,3 +1,4 @@
+import { ASTEvaluator } from './evaluate';
 import QueryParser from './query';
 import ReferenceResolver from './resolver';
 
@@ -5,11 +6,14 @@ type FieldMapping = {
   [key: string]: string;
 };
 
-export default function filter(
+export default function filter<T = any>(
   queryInstance: QueryParser,
-  data: any[],
-  fieldMapping: FieldMapping,
+  data: T[],
   resolver?: ReferenceResolver,
-) {
+  fieldMapping?: FieldMapping,
+): T[] {
   const ast = queryInstance.toAST();
+  const evaluator = new ASTEvaluator();
+
+  return evaluator.evaluateAST(ast, data);
 }

@@ -131,3 +131,5 @@ exports[`filter with field groups > should Nested Grouping Test 2 1`] = `7`;
 exports[`filter with field groups > should Simple Test 1 1`] = `88`;
 
 exports[`filter with field groups > should Simple Test 2 and OR 1`] = `2`;
+
+exports[`filter with variables > should Simple Global Variable Test 1 1`] = `2`;
