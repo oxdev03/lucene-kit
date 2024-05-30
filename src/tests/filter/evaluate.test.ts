@@ -2,6 +2,7 @@ import { describe, expect, it, test } from 'vitest';
 import QueryParser from '../../filter/query';
 import personData from '../__fixtures__/data-person';
 import filter from '../../filter';
+import ReferenceResolver, { VariableResolver } from '../../filter/resolver';
 
 describe('filter with OR,AND,NOT', () => {
   type Test = {
@@ -569,6 +570,7 @@ describe('filter with variables', () => {
     desc: string;
     query: string;
     expected: (p: (typeof personData)[0]) => boolean;
+    variableResolver?: VariableResolver;
   };
 
   const tests: Test[] = [
@@ -577,12 +579,63 @@ describe('filter with variables', () => {
       desc: 'Simple Global Variable Test 1',
       query: 'age:$age',
       expected: (p) => p.age === 30,
+      variableResolver: {
+        age: 30,
+      },
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Global Variable Test 2',
+      query: 'age:$age',
+      expected: (p) => p.age == undefined,
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Global Variable Test 3',
+      query: 'age:($age1 OR $age2)',
+      expected: (p) => p.age == 30 || p.age == 34,
+      variableResolver: {
+        age1: 30,
+        age2: 34,
+      },
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Global Variable Test 4',
+      query: 'age:$kid',
+      expected: (p) => p.age >= 0 && p.age <= 14,
+      variableResolver: {
+        kid: new QueryParser('age:[0 TO 14]'),
+      },
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Global Variable Test 5',
+      query: 'age:[$baby TO $teen]',
+      expected: (p) => p.age >= 0 && p.age <= 16,
+      variableResolver: {
+        baby: 0,
+        teen: 16,
+      },
+    },
+    {
+      group: 'complex',
+      desc: 'Complex Global Variable Test 1',
+      query: '$query1 AND (age:[$25 TO $50] OR $query2)',
+      expected: (p) =>
+        ((p.gender === 'Male' && p.age >= 20) || (p.gender === 'Female' && p.age >= 20)) && p.age >= 25 && p.age <= 50,
+      variableResolver: {
+        '25': 25,
+        '50': 50,
+        query2: new QueryParser('age:[$22 TO $55]'),
+        query1: new QueryParser('(gender:Male AND age:>=20) OR (gender:Female AND age:>=20)'),
+      },
     },
   ];
 
   tests.forEach((t) => {
     it(`should ${t.desc}`, () => {
-      const result = filter(new QueryParser(t.query), personData);
+      const result = filter(new QueryParser(t.query), personData, new ReferenceResolver(t.variableResolver));
       expect(result).toEqual(personData.filter(t.expected));
       expect(result.length).toMatchSnapshot();
     });

@@ -13,7 +13,7 @@ export default function filter<T = any>(
   fieldMapping?: FieldMapping,
 ): T[] {
   const ast = queryInstance.toAST();
-  const evaluator = new ASTEvaluator();
+  const evaluator = new ASTEvaluator(ast, resolver);
 
-  return evaluator.evaluateAST(ast, data);
+  return evaluator.evaluate(data);
 }
