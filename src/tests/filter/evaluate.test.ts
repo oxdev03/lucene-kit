@@ -2,7 +2,7 @@ import { describe, expect, it, test } from 'vitest';
 import QueryParser from '../../filter/query';
 import personData from '../__fixtures__/data-person';
 import filter from '../../filter';
-import ReferenceResolver, { VariableResolver } from '../../filter/resolver';
+import ReferenceResolver, { FunctionResolver, VariableResolver } from '../../filter/resolver';
 
 describe('filter with OR,AND,NOT', () => {
   type Test = {
@@ -636,6 +636,46 @@ describe('filter with variables', () => {
   tests.forEach((t) => {
     it(`should ${t.desc}`, () => {
       const result = filter(new QueryParser(t.query), personData, new ReferenceResolver(t.variableResolver));
+      expect(result).toEqual(personData.filter(t.expected));
+      expect(result.length).toMatchSnapshot();
+    });
+  });
+});
+
+describe('filter with functions', () => {
+  type Test = {
+    group: 'simple' | 'complex';
+    desc: string;
+    query: string;
+    expected: (p: (typeof personData)[0]) => boolean;
+    functionResolver?: FunctionResolver;
+    variableResolver?: VariableResolver;
+  };
+
+  const tests: Test[] = [
+    {
+      group: 'simple',
+      desc: 'Simple Function Test 1',
+      query: 'age:determine("kid")',
+      expected: (p) => p.age >= 0 && p.age <= 16,
+      functionResolver: {
+        determine: (node) => {
+          const firstParameter = node.params[0] as any;
+          if(firstParameter.value.value == 'kid') {
+            return new QueryParser('age:[0 TO 16]')  
+          }
+        },
+      },
+    },
+  ];
+
+  tests.forEach((t) => {
+    it(`should ${t.desc}`, () => {
+      const result = filter(
+        new QueryParser(t.query),
+        personData,
+        new ReferenceResolver(t.variableResolver || {}, t.functionResolver),
+      );
       expect(result).toEqual(personData.filter(t.expected));
       expect(result.length).toMatchSnapshot();
     });

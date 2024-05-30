@@ -8,16 +8,22 @@ import {
   Term,
   TermLikeNode,
   VariableNode,
+  FunctionNode,
+  FieldValue,
+  FieldValueVariable,
+  NodeType,
 } from '../types/ast';
 import { FlatType } from '../types/data';
 import {
   isConjunction,
+  isFunctionNode,
   isGroupLike,
   isNegation,
   isRange,
   isRegexp,
   isStringDataType,
   isTerm,
+  isTermList,
   isTermType,
   isVariableNode,
   isWildcard,
@@ -47,6 +53,8 @@ export class ASTEvaluator {
       return this.evaluateNegation(node, data);
     } else if (isVariableNode(node) && this.resolver) {
       return this.evaluateAST(this.evaluateVariable(node), data);
+    } else if (isFunctionNode(node)) {
+      return this.evaluateAST(this.evaluateFunctionNode(node), data);
     } else if (isTermType(node)) {
       return this.evaluateTermLike(node, data);
     }
@@ -76,6 +84,54 @@ export class ASTEvaluator {
       resolvedNode.value = {
         type: 'value',
         value: resolved,
+      };
+      return resolvedNode;
+    }
+  }
+
+  private evaluateInnerVariable(node: FieldValueVariable): FieldValue<any> {
+    const resolved = this.resolver!.resolveVariable(node);
+    return {
+      type: 'value',
+      value: resolved,
+    };
+  }
+
+  private evaluateFunctionNode(node: FunctionNode): Node {
+    const resolveVariableInTermList = (term: FieldValue<any> | FieldValue<any>[]): FieldValue<any> | FieldValue<any>[] => {
+      if (Array.isArray(term)) {
+        return term.map(resolveVariableInTermList) as FieldValue<any>[];
+      } else if (term.type === 'variable') {
+        return this.evaluateInnerVariable(term);
+      } else {
+        return term;
+      }
+    };
+
+    // resolve parameters which use variable
+    //@ts-expect-error
+    node.params = node.params.map((p) => {
+      if (isVariableNode(p)) {
+        return this.evaluateVariable(p);
+      } else if (isTermList(p)) {
+        //@ts-expect-error
+        p.value = p.value.map((v) => resolveVariableInTermList(v));
+      }
+      return p;
+    });
+
+    const resolved = this.resolver!.resolveFunction(node);
+
+    if (resolved instanceof QueryParser) {
+      return resolved.toAST();
+    } else {
+      const resolvedNode: Term = {
+        type: NodeType.Term,
+        field: node.field,
+        value: {
+          type: 'value',
+          value: resolved,
+        },
       };
       return resolvedNode;
     }
