@@ -1,5 +1,5 @@
-import * as i from '../../types/ast'
-import * as utils from '../../types/guards'
+import * as i from '../../types/ast';
+import * as utils from '../../types/guards';
 
 function validateScopedChars(chars: string[]) {
   chars.forEach((char, ind) => {

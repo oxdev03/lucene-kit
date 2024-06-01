@@ -43,7 +43,10 @@ export class ASTEvaluator {
    * @param ast The abstract syntax tree (AST) to evaluate.
    * @param resolver Optional reference resolver to resolve variables and functions.
    */
-  constructor(private readonly ast: Node, private readonly resolver?: ReferenceResolver) {}
+  constructor(
+    private readonly ast: Node,
+    private readonly resolver?: ReferenceResolver,
+  ) {}
 
   /**
    * Evaluates the AST and filters the provided data.

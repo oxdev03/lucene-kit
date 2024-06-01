@@ -108,7 +108,7 @@ export interface Wildcard extends StringDataType, TermLikeNode {
 }
 
 export interface VariableNode extends TermLikeNode {
-  value: FieldValueVariable
+  value: FieldValueVariable;
 }
 
 export interface FunctionNode extends TermLikeNode {

@@ -17,7 +17,7 @@ export default function* iterate(
   maxDepth: number = Infinity,
 ): Generator<IterationResult> {
   const splittedFields = field.split('.');
-  
+
   /**
    * Recursively iterates over the object or array and yields iteration results.
    * @param obj The object or array to iterate over.

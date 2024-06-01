@@ -24,7 +24,7 @@ const testFunctionQueries: TestFilterQuery[] = [
     variableResolver: {
       a: () => 'kid',
     },
-    resultLen: (len) => expect(len).toMatchInlineSnapshot(`21`)
+    resultLen: (len) => expect(len).toMatchInlineSnapshot(`21`),
   },
   {
     group: 'function',
@@ -64,7 +64,7 @@ const testFunctionQueries: TestFilterQuery[] = [
     variableResolver: {
       c: 'c',
     },
-    resultLen: (len) => expect(len).toMatchInlineSnapshot(`21`)
+    resultLen: (len) => expect(len).toMatchInlineSnapshot(`21`),
   },
   {
     group: 'function',
@@ -131,7 +131,7 @@ const testFunctionQueries: TestFilterQuery[] = [
     variableResolver: {
       c: 'c',
     },
-    resultLen: (len) => expect(len).toMatchInlineSnapshot(`0`)
+    resultLen: (len) => expect(len).toMatchInlineSnapshot(`0`),
   },
 ];
 
