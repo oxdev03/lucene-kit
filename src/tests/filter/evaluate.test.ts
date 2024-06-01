@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 import personData, { PersonData } from '../__fixtures__/data-person';
-import ReferenceResolver, { FunctionResolver, FunctionResolverReturnType, VariableResolver } from '../../filter/resolver';
+import ReferenceResolver, { FunctionResolver, FunctionResolverReturnType, VariableResolver } from '../../handlers/resolver';
 import { QueryParser, filter } from '../..';
 
 describe('filter with OR,AND,NOT', () => {

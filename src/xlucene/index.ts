@@ -1,5 +1,5 @@
 import { Node } from '../types/ast';
-import { parse } from '../xlucene/lucene';
+import { parse } from './lucene';
 
 export default class QueryParser {
   private cachedAst?: Node;

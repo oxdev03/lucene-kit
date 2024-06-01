@@ -3,7 +3,6 @@ import {
   GroupLikeNode,
   Negation,
   Node,
-  RangeNode,
   Range,
   Term,
   TermLikeNode,
@@ -29,9 +28,9 @@ import {
   isWildcard,
 } from '../types/guards';
 import iterate from '../utils/iterate';
-import QueryParser from './query';
+import QueryParser from '../xlucene';
 import ReferenceResolver from './resolver';
-import { testRangeNode, testRegexp, testString, testWildcard } from './test-value';
+import { testRangeNode, testRegexp, testString, testWildcard } from '../filter/test-value';
 
 export class ASTEvaluator {
   constructor(private readonly ast: Node, private readonly resolver?: ReferenceResolver) {}

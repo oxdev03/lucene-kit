@@ -1,6 +1,6 @@
 import { FieldValue, FieldValueVariable, FunctionNode, VariableNode } from '../types/ast';
 import { FlatType } from '../types/data';
-import QueryParser from './query';
+import QueryParser from '../xlucene';
 
 type VariableResolverReturnType = FlatType | QueryParser;
 export type FunctionResolverReturnType<T> =

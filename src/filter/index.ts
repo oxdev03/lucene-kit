@@ -1,6 +1,6 @@
-import { ASTEvaluator } from './evaluate';
-import QueryParser from './query';
-import ReferenceResolver from './resolver';
+import { ASTEvaluator } from '../handlers/evaluate';
+import QueryParser from '../xlucene';
+import ReferenceResolver from '../handlers/resolver';
 
 export default function filter<T = any>(
   queryInstance: QueryParser,
