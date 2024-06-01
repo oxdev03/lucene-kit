@@ -141,8 +141,17 @@ export class ASTEvaluator {
     if (resolved instanceof QueryParser) {
       return [resolved.toAST(), data];
     } else if (typeof resolved == 'object' && !(resolved instanceof Date) && (resolved?.resolved || resolved?.data)) {
-      const query = resolved instanceof QueryParser ? resolved.toAST() : resolvedNode;
-      return [resolved?.resolved ? query : undefined, resolved?.data || data];
+      const query =
+        resolved?.resolved instanceof QueryParser
+          ? resolved?.resolved.toAST()
+          : {
+              ...resolvedNode,
+              value: {
+                type: 'value',
+                value: resolved.resolved,
+              },
+            };
+      return [resolved?.resolved ? query : undefined, resolved?.data == undefined ? data : resolved.data];
     } else {
       const resolvedNode: Term = {
         type: NodeType.Term,

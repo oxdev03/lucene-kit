@@ -170,3 +170,12 @@ export default [
   { id: 99, gender: 'Female', firstName: 'Darcie', lastName: 'Whiskin', age: 61, email: 'dwhiskin2q@cloudflare.com' },
   { id: 100, gender: 'Male', firstName: 'Symon', lastName: 'Royste', age: 68, email: undefined },
 ];
+
+export type PersonData = {
+  id: number;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  email: string;
+};

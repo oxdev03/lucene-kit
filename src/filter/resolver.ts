@@ -3,12 +3,12 @@ import { FlatType } from '../types/data';
 import QueryParser from './query';
 
 type VariableResolverReturnType = FlatType | QueryParser;
-type FunctionResolverReturnType<T> =
+export type FunctionResolverReturnType<T> =
   | FlatType
   | QueryParser
   | {
       resolved?: FlatType | QueryParser;
-      data: T;
+      data?: T;
     };
 
 export type VariableResolver = {
@@ -17,8 +17,10 @@ export type VariableResolver = {
     | VariableResolverReturnType;
 };
 
+export type FunctionResolverCallBack<T> = (node: FunctionNode, data: T) => FunctionResolverReturnType<T>
+
 export type FunctionResolver = {
-  [name: string]: <T = any>(node: FunctionNode, data: T) => FunctionResolverReturnType<T>;
+  [name: string]: FunctionResolverCallBack<any>;
 };
 
 export default class ReferenceResolver {
@@ -35,7 +37,7 @@ export default class ReferenceResolver {
     return this;
   }
 
-  addFunctionResolver(name: string, resolver: FunctionResolver['']): ReferenceResolver {
+  addFunctionResolver(name: string, resolver: FunctionResolverCallBack<any>): ReferenceResolver {
     this.functionResolver[name] = resolver;
     return this;
   }

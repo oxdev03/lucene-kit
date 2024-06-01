@@ -136,6 +136,8 @@ exports[`filter with functions > should Simple Function Test 1 1`] = `21`;
 
 exports[`filter with functions > should Simple Function Test 2 2`] = `21`;
 
+exports[`filter with functions > should Simple Function Test 3 2`] = `0`;
+
 exports[`filter with variables > should Complex Global Variable Test 1 1`] = `23`;
 
 exports[`filter with variables > should Simple Global Variable Test 1 1`] = `2`;
