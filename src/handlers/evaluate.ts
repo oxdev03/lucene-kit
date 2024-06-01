@@ -100,7 +100,7 @@ export class ASTEvaluator {
    * @private
    */
   private evaluateLogicalGroup<T = any>(node: GroupLikeNode, data: any[]): T[] {
-    let result: any[] = [];
+    const result: any[] = [];
 
     for (const subNode of node.flow) {
       const subResult = this.evaluateAST(subNode, data);
