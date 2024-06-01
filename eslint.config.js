@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // @ts-check
 
 const eslint = require('@eslint/js');
@@ -7,10 +8,7 @@ const globals = require('globals');
 
 module.exports = tseslint.config(
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**'
-    ],
+    ignores: ['**/node_modules/**', '**/dist/**'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -22,10 +20,9 @@ module.exports = tseslint.config(
         ...globals.node,
       },
       parserOptions: {
-        project: [
-          'tsconfig.json'],
+        project: ['tsconfig.json'],
         tsconfigRootDir: __dirname,
-      }
-    }
-  }
-)
+      },
+    },
+  },
+);
