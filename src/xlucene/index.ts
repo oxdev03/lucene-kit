@@ -24,6 +24,8 @@ export default class QueryParser {
 
   private cacheAst() {
     if (!this.cachedAst) {
+      // peggy parse function doesn't match with our typings
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       this.cachedAst = parse(this.luceneQuery);
     }
 

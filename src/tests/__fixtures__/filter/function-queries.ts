@@ -2,6 +2,7 @@ import { expect } from 'vitest';
 import { TestFilterQuery } from '.';
 import { QueryParser } from '../../..';
 import { PersonData } from '../data-person';
+import { Term } from '../../../types/ast';
 
 const testFunctionQueries: TestFilterQuery[] = [
   {
@@ -12,7 +13,7 @@ const testFunctionQueries: TestFilterQuery[] = [
     expected: (p) => p.age >= 0 && p.age <= 16,
     functionResolver: {
       determine: (node) => {
-        const firstParameter = node.params[0] as any;
+        const firstParameter = node.params[0] as Term;
         if (firstParameter.value.value == 'kid') {
           return new QueryParser('age:[0 TO 16]');
         }
@@ -73,7 +74,7 @@ const testFunctionQueries: TestFilterQuery[] = [
     query: 'age:tuple(param1 t:[[a][b]] , c:12 d:11)',
     expected: (p) => p.age == 16,
     functionResolver: {
-      tuple: (node, data) => {
+      tuple: (node) => {
         expect(node.params).toMatchInlineSnapshot(`
             [
               {

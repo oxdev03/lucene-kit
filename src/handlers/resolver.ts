@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FieldValueVariable, FunctionNode, VariableNode } from '../types/ast';
 import { FlatType } from '../types/data';
 import QueryParser from '../xlucene';

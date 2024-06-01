@@ -1,4 +1,4 @@
-import { expect, test, describe, it, bench } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import { parse } from '../../xlucene/lucene';
 import queries from '../__fixtures__/queries';
 

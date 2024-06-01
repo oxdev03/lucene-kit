@@ -8,7 +8,7 @@ const globals = require('globals');
 
 module.exports = tseslint.config(
   {
-    ignores: ['**/node_modules/**', '**/dist/**'],
+    ignores: ['**/node_modules/**', '**/dist/**', 'src/xlucene/lucene.ts'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

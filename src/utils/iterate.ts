@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/*  eslint-disable @typescript-eslint/no-unsafe-argument  */
 import { testWildcard } from '../filter/test-value';
 import { isWildCardString } from '../types/guards';
 
@@ -34,13 +36,13 @@ export default function* iterate(
 
     if (typeof obj === 'object' && obj !== null) {
       // If the object is not an array and has the current field, continue iteration.
-      if (!isWildcard && obj.hasOwnProperty(currentField)) {
+      if (!isWildcard && Object.prototype.hasOwnProperty.call(obj, currentField)) {
         const newPath = currentPath.concat(currentField);
         yield* _iterate(obj[currentField], newPath, depth + 1);
       } else {
         // If the object is an array or contains the wildcard, iterate over its properties.
         for (const key in obj) {
-          if (obj.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
             // Filter properties based on the field or wildcard pattern.
             if (!field || (currentField && testWildcard(key, currentField)) || isTrailingWildcard) {
               const newPath = currentPath.concat(key);

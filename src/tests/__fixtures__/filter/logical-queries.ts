@@ -262,7 +262,7 @@ const testsNested: TestFilterQuery[] = [
     difficulty: 'nested',
     desc: 'Nested Test 1',
     query: '(((gender:Male AND age:47))) OR (gender:Female AND age:55) AND age:30',
-    //@ts-expect-error
+    //@ts-expect-error query just for testing grouping
     expected: (p) => (p.gender === 'Male' && p.age === 47) || (p.gender === 'Female' && p.age === 55 && p.age === 30),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`2`),
   },
@@ -273,7 +273,7 @@ const testsNested: TestFilterQuery[] = [
     query: '(((NOT gender:Female) AND age:15)) OR (gender:Male AND age:84) AND NOT gender:Non-binary',
 
     expected: (p) =>
-      //@ts-expect-error
+      //@ts-expect-error no over-lap
       (p.gender !== 'Female' && p.age === 15) || (p.gender === 'Male' && p.age === 84 && p.gender !== 'Non-binary'),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`3`),
   },
@@ -282,7 +282,7 @@ const testsNested: TestFilterQuery[] = [
     difficulty: 'nested',
     desc: 'Nested Test 3',
     query: '((NOT age:15) OR (gender:Female OR age:55)) AND NOT age:30',
-    //@ts-expect-error
+    //@ts-expect-error no over-lap
     expected: (p) => (p.age !== 15 || p.gender === 'Female' || p.age === 55) && p.age !== 30,
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`97`),
   },
@@ -343,7 +343,7 @@ const testsNested: TestFilterQuery[] = [
     difficulty: 'nested',
     desc: 'Nested Test 10',
     query: '((NOT gender:Female) OR (gender:Male AND age:84)) AND NOT gender:Non-binary',
-    //@ts-expect-error
+    //@ts-expect-error no-over-lap
     expected: (p) => (p.gender !== 'Female' || (p.gender == 'Male' && p.age === 84)) && p.gender !== 'Non-binary',
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`54`),
   },

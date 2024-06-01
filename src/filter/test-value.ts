@@ -9,7 +9,7 @@ import { isWildCardString } from '../types/guards';
  * @param quoted whether it should be a strict message.
  * @returns True if the value matches the filter, otherwise false.
  */
-export function testString(value: FlatType, filter: string | number, quoted: boolean): boolean {
+export function testString(value: FlatType, filter: string | number | boolean, quoted: boolean): boolean {
   if (quoted) {
     return String(value) == filter;
   } else if (typeof filter == 'string') {

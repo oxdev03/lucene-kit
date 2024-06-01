@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface Node {
   type: NodeType;
 }
@@ -119,7 +121,7 @@ export interface FunctionNode extends TermLikeNode {
 }
 
 export interface AnyDataType {
-  value: FieldValue<string | number | boolean | any>;
+  value: FieldValue<any>;
 }
 
 export interface NumberDataType {

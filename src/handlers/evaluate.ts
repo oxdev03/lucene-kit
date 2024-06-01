@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Conjunction,
   GroupLikeNode,
@@ -19,6 +22,7 @@ import {
   isFunctionNode,
   isGroupLike,
   isNegation,
+  isNode,
   isRange,
   isRegexp,
   isStringDataType,
@@ -53,7 +57,7 @@ export class ASTEvaluator {
    * @param data The data to filter based on the AST.
    * @returns The filter data.
    */
-  evaluate<T = any>(data: T[]): T[] {
+  evaluate<T = never[]>(data: T[]): T[] {
     return this.evaluateAST(this.ast, data);
   }
 
@@ -64,7 +68,7 @@ export class ASTEvaluator {
    * @returns The filtered data.
    * @private
    */
-  private evaluateAST<T = any>(node: Node, data: T[]): T[] {
+  private evaluateAST<T = never>(node: Node, data: T[]): T[] {
     if (!node) return data;
 
     if (isEmptyNode(node)) {
@@ -99,12 +103,12 @@ export class ASTEvaluator {
    * @returns The filtered data.
    * @private
    */
-  private evaluateLogicalGroup<T = any>(node: GroupLikeNode, data: any[]): T[] {
-    const result: any[] = [];
+  private evaluateLogicalGroup<T = never>(node: GroupLikeNode, data: T[]): T[] {
+    const result = [];
 
     for (const subNode of node.flow) {
       const subResult = this.evaluateAST(subNode, data);
-      result.push(...subResult.filter((r) => !result.includes(r)));
+      result.push(...(subResult.filter((r) => !result.includes(r as never)) as never[]));
     }
 
     return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
@@ -137,8 +141,11 @@ export class ASTEvaluator {
    * @returns The resolved node.
    * @private
    */
-  private evaluateInnerVariable(node: FieldValueVariable): FieldValue<any> {
+  private evaluateInnerVariable(node: FieldValueVariable): FieldValue<FlatType> {
     const resolved = this.resolver!.resolveVariable(node);
+    if (resolved instanceof QueryParser) {
+      throw new Error(`${node.type}: ${node.value} can't resolve variable to ast inside function or range node`);
+    }
     return {
       type: 'value',
       value: resolved,
@@ -152,12 +159,11 @@ export class ASTEvaluator {
    * @returns The resolved node, AST or filtered data.
    * @private
    */
-  private evaluateFunctionNode<T = any>(node: FunctionNode, data: T): [Node | undefined, T] {
-    const resolveVariableInTermList = (
-      term: FieldValue<any> | FieldValue<any>[],
-    ): FieldValue<any> | FieldValue<any>[] => {
+  private evaluateFunctionNode<T = never>(node: FunctionNode, data: T[]): [Node | undefined, T[]] {
+    const resolveVariableInTermList = (term: FieldValue<any>): FieldValue<any> => {
       if (Array.isArray(term)) {
-        return term.map(resolveVariableInTermList) as FieldValue<any>[];
+        //@ts-expect-error edge case with nested term lists
+        return term.map(resolveVariableInTermList);
       } else if (term.type === 'variable') {
         return this.evaluateInnerVariable(term);
       } else {
@@ -166,13 +172,11 @@ export class ASTEvaluator {
     };
 
     // resolve parameters which use variable
-    //@ts-expect-error
     node.params = node.params.map((p) => {
       if (isVariableNode(p)) {
-        return this.evaluateVariable(p);
+        return this.evaluateVariable(p) as Term;
       } else if (isTermList(p)) {
-        //@ts-expect-error
-        p.value = p.value.map((v) => resolveVariableInTermList(v));
+        p.value = p.value.map(resolveVariableInTermList);
       }
       return p;
     });
@@ -222,7 +226,7 @@ export class ASTEvaluator {
    * @returns The filtered data.
    * @private
    */
-  private evaluateTermLike<T = any>(node: TermLikeNode, data: any[]): T[] {
+  private evaluateTermLike<T = never>(node: TermLikeNode, data: T[]): T[] {
     return data.filter((item) => this.matchTermLike(node, item));
   }
 
@@ -236,14 +240,18 @@ export class ASTEvaluator {
   private matchTermLike(node: TermLikeNode, item: any): boolean {
     const testValue = (value: FlatType): boolean => {
       if (isTerm(node)) {
-        return testString(value, node.value.value, isStringDataType(node) ? node.quoted : false);
+        return testString(value, node.value.value as string, isStringDataType(node) ? node.quoted : false);
       } else if (isRegexp(node)) {
         return testRegexp(value, node.value.value);
       } else if (isWildcard(node)) {
         return testWildcard(value, node.value.value);
       } else if (isRange(node)) {
-        const left = (isVariableNode(node.left) ? this.evaluateVariable(node.left) : node.left) as Range['left'];
-        const right = (isVariableNode(node.right) ? this.evaluateVariable(node.right) : node.right) as Range['right'];
+        const left = (
+          isNode(node.left) && isVariableNode(node.left) ? this.evaluateVariable(node.left) : node.left
+        ) as Range['left'];
+        const right = (
+          isNode(node.right) && isVariableNode(node.right) ? this.evaluateVariable(node.right) : node.right
+        ) as Range['right'];
         return (
           testRangeNode(left.operator, value, left.value.value) &&
           testRangeNode(right?.operator, value, right?.value?.value)
@@ -253,8 +261,8 @@ export class ASTEvaluator {
       return false;
     };
 
-    for (const [_field, value] of iterate(item, node.field || '')) {
-      if (testValue(value)) {
+    for (const [, value] of iterate(item as never, node.field || '')) {
+      if (testValue(value as FlatType)) {
         return true;
       }
     }
@@ -269,9 +277,9 @@ export class ASTEvaluator {
    * @returns The filtered data.
    * @private
    */
-  private evaluateNegation<T = any>(node: Negation, data: any[]): T[] {
+  private evaluateNegation<T = never>(node: Negation, data: T[]): T[] {
     const filteredData = this.evaluateAST(node.node, data);
-    return data.filter((item: any) => !filteredData.includes(item));
+    return data.filter((item) => !filteredData.includes(item));
   }
 
   /**
@@ -281,7 +289,7 @@ export class ASTEvaluator {
    * @returns The filtered data.
    * @private
    */
-  private evaluateConjunction<T = any>(node: Conjunction, data: any[]): T[] {
+  private evaluateConjunction<T = never>(node: Conjunction, data: T[]): T[] {
     let result = data;
     for (const subNode of node.nodes) {
       result = this.evaluateAST(subNode, result);

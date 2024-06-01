@@ -4,7 +4,7 @@
     "build": "tsc --build",
     "test": "vitest",
     "bench": "vitest bench",
-    "lint": "eslint src/**/*",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
     "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\""
