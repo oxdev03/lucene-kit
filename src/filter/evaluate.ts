@@ -54,7 +54,12 @@ export class ASTEvaluator {
     } else if (isVariableNode(node) && this.resolver) {
       return this.evaluateAST(this.evaluateVariable(node), data);
     } else if (isFunctionNode(node)) {
-      return this.evaluateAST(this.evaluateFunctionNode(node), data);
+      const [query, filteredData] = this.evaluateFunctionNode(node, data);
+      if (!query) {
+        return filteredData;
+      } else {
+        return this.evaluateAST(query, data);
+      }
     } else if (isTermType(node)) {
       return this.evaluateTermLike(node, data);
     }
@@ -97,8 +102,10 @@ export class ASTEvaluator {
     };
   }
 
-  private evaluateFunctionNode(node: FunctionNode): Node {
-    const resolveVariableInTermList = (term: FieldValue<any> | FieldValue<any>[]): FieldValue<any> | FieldValue<any>[] => {
+  private evaluateFunctionNode<T = any>(node: FunctionNode, data: T): [Node | undefined, T] {
+    const resolveVariableInTermList = (
+      term: FieldValue<any> | FieldValue<any>[],
+    ): FieldValue<any> | FieldValue<any>[] => {
       if (Array.isArray(term)) {
         return term.map(resolveVariableInTermList) as FieldValue<any>[];
       } else if (term.type === 'variable') {
@@ -120,10 +127,22 @@ export class ASTEvaluator {
       return p;
     });
 
-    const resolved = this.resolver!.resolveFunction(node);
+    const resolved = this.resolver!.resolveFunction(node, data);
+
+    const resolvedNode: Term = {
+      type: NodeType.Term,
+      field: node.field,
+      value: {
+        type: 'value',
+        value: resolved,
+      },
+    };
 
     if (resolved instanceof QueryParser) {
-      return resolved.toAST();
+      return [resolved.toAST(), data];
+    } else if (typeof resolved == 'object' && !(resolved instanceof Date) && (resolved?.resolved || resolved?.data)) {
+      const query = resolved instanceof QueryParser ? resolved.toAST() : resolvedNode;
+      return [resolved?.resolved ? query : undefined, resolved?.data || data];
     } else {
       const resolvedNode: Term = {
         type: NodeType.Term,
@@ -133,7 +152,7 @@ export class ASTEvaluator {
           value: resolved,
         },
       };
-      return resolvedNode;
+      return [resolvedNode, data];
     }
   }
 

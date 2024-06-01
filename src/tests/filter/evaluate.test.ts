@@ -656,14 +656,54 @@ describe('filter with functions', () => {
     {
       group: 'simple',
       desc: 'Simple Function Test 1',
-      query: 'age:determine("kid")',
+      query: 'age:determine($a)',
       expected: (p) => p.age >= 0 && p.age <= 16,
       functionResolver: {
-        determine: (node) => {
+        determine: (node, data) => {
           const firstParameter = node.params[0] as any;
-          if(firstParameter.value.value == 'kid') {
-            return new QueryParser('age:[0 TO 16]')  
+          if (firstParameter.value.value == 'kid') {
+            return new QueryParser('age:[0 TO 16]');
           }
+        },
+      },
+      variableResolver: {
+        a: 'kid',
+      },
+    },
+    {
+      group: 'simple',
+      desc: 'Simple Function Test 2',
+      query: 'age:tuple(t:[a [b [c]]])',
+      expected: (p) => p.age >= 0 && p.age <= 16,
+      functionResolver: {
+        tuple: (node, data) => {
+          const tParam = node.params.find((p) => p.field == 't')!;
+          expect(tParam.value).toMatchInlineSnapshot(`
+            [
+              {
+                "type": "value",
+                "value": "a",
+              },
+              [
+                {
+                  "type": "value",
+                  "value": "b",
+                },
+                [
+                  {
+                    "type": "value",
+                    "value": "c",
+                  },
+                ],
+              ],
+            ]
+          `);
+
+          console.log(data)
+
+          return {
+            data: data.filter((p) => p.age >= 0 && p.age <= 16)
+          };
         },
       },
     },

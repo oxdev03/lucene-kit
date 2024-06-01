@@ -2,14 +2,23 @@ import { FieldValue, FieldValueVariable, FunctionNode, VariableNode } from '../t
 import { FlatType } from '../types/data';
 import QueryParser from './query';
 
-type ResolverReturnType = FlatType | QueryParser;
+type VariableResolverReturnType = FlatType | QueryParser;
+type FunctionResolverReturnType<T> =
+  | FlatType
+  | QueryParser
+  | {
+      resolved?: FlatType | QueryParser;
+      data: T;
+    };
 
 export type VariableResolver = {
-  [name: string]: ((node: VariableNode | FieldValueVariable) => ResolverReturnType) | ResolverReturnType;
+  [name: string]:
+    | ((node: VariableNode | FieldValueVariable) => VariableResolverReturnType)
+    | VariableResolverReturnType;
 };
 
 export type FunctionResolver = {
-  [name: string]: (node: FunctionNode) => ResolverReturnType;
+  [name: string]: <T = any>(node: FunctionNode, data: T) => FunctionResolverReturnType<T>;
 };
 
 export default class ReferenceResolver {
@@ -31,7 +40,7 @@ export default class ReferenceResolver {
     return this;
   }
 
-  resolveVariable(node: VariableNode | FieldValueVariable): ResolverReturnType {
+  resolveVariable(node: VariableNode | FieldValueVariable): VariableResolverReturnType {
     const varName = typeof node.value == 'object' ? node.value.value : node.value;
     const resolver = this.variablesResolver[varName];
     if (varName && resolver !== undefined) {
@@ -45,11 +54,11 @@ export default class ReferenceResolver {
     return undefined;
   }
 
-  resolveFunction(node: FunctionNode): ResolverReturnType {
+  resolveFunction<T = any>(node: FunctionNode, data: T): FunctionResolverReturnType<T> {
     const funcName = node.name;
     const resolver = this.functionResolver[funcName];
     if (funcName && resolver !== undefined) {
-      return resolver(node);
+      return resolver(node, data);
     }
 
     return undefined;
