@@ -1,3 +1,29 @@
+/*
+ * This file includes the grammar implementation that was adapted from @terascope/teraslice.
+ * The original XLucene implementation can be found at https://github.com/terascope/teraslice/blob/master/packages/xlucene-parser.
+ *
+ * Copyright (c) 2018
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+
 /** Control Flow **/
 start
     = ws* negate:NegationExpression ws* EOF { return negate; }
@@ -144,8 +170,8 @@ BaseTermExpression
     }
     / VariableExpression
     / field:FieldName ws* FieldSeparator ws* range:RangeExpression {
-        
-        
+
+
         return {
             ...range,
             field,
@@ -153,14 +179,14 @@ BaseTermExpression
     }
     / field:FieldName ws* FieldSeparator ws* term:(RegexpType/QuotedStringType) {
         const node = { ...term, field };
-        
+
         return node;
     }
     / FunctionExpression
     / FieldGroup
     / field:FieldName ws* FieldSeparator ws* term:(ParensStringType/WildcardType) {
         const node = { ...term, field };
-        
+
         return node;
     }
     / field:FieldName ws* FieldSeparator ws* value:RestrictedString &{
@@ -180,7 +206,7 @@ BaseTermExpression
     }
     / field:FieldName ws* FieldSeparator ws* term:(BooleanType / FloatType / IntegerType / RestrictedStringType) {
         const node = { ...term, field };
-        
+
         return node;
     }
 
@@ -191,7 +217,7 @@ VariableExpression
             field,
             value: variableTerm.value,
         };
-        
+
         return node;
     }
 
