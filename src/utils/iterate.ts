@@ -17,7 +17,13 @@ export default function* iterate(
   maxDepth: number = Infinity,
 ): Generator<IterationResult> {
   const splittedFields = field.split('.');
-
+  
+  /**
+   * Recursively iterates over the object or array and yields iteration results.
+   * @param obj The object or array to iterate over.
+   * @param currentPath The current path in the object hierarchy.
+   * @param depth The current depth of recursion.
+   */
   function* _iterate(obj: AnyObject | any[], currentPath: string[], depth: number): Generator<IterationResult> {
     if (depth > maxDepth) return;
 
@@ -27,12 +33,15 @@ export default function* iterate(
     const isWildcard = isWildCardString(currentField);
 
     if (typeof obj === 'object' && obj !== null) {
+      // If the object is not an array and has the current field, continue iteration.
       if (!isWildcard && obj.hasOwnProperty(currentField)) {
         const newPath = currentPath.concat(currentField);
         yield* _iterate(obj[currentField], newPath, depth + 1);
       } else {
+        // If the object is an array or contains the wildcard, iterate over its properties.
         for (const key in obj) {
           if (obj.hasOwnProperty(key)) {
+            // Filter properties based on the field or wildcard pattern.
             if (!field || (currentField && testWildcard(key, currentField)) || isTrailingWildcard) {
               const newPath = currentPath.concat(key);
               yield* _iterate(obj[key], newPath, depth + 1);
@@ -41,9 +50,11 @@ export default function* iterate(
         }
       }
     } else if (currentPath.length === splittedFields.length || isTrailingWildcard || !field) {
+      // If reached the end of the path or it's a trailing wildcard, yield the current path and object.
       yield [currentPath.join('.'), obj];
     }
   }
 
+  // Start the iteration from the top-level object or array.
   yield* _iterate(obj, [], 1);
 }

@@ -1,7 +1,13 @@
 import { describe, expect, it, test } from 'vitest';
 import personData, { PersonData } from '../__fixtures__/data-person';
-import ReferenceResolver, { FunctionResolver, FunctionResolverReturnType, VariableResolver } from '../../handlers/resolver';
+import ReferenceResolver, {
+  FunctionResolver,
+  FunctionResolverReturnType,
+  VariableResolver,
+} from '../../handlers/resolver';
 import { QueryParser, filter } from '../..';
+import testFunctionQueries from '../__fixtures__/filter/function-queries';
+import testFilterQueries from '../__fixtures__/filter';
 
 describe('filter with OR,AND,NOT', () => {
   type Test = {
@@ -396,396 +402,35 @@ describe('filter with field groups', () => {
   });
 });
 
-describe('filter with Regex', () => {
-  type Test = {
-    group: 'simple' | 'escaped' | 'nested';
-    desc: string;
-    query: string;
-    expected: (p: (typeof personData)[0]) => boolean;
-  };
+describe(`filter`, () => {
+  const testGroups = new Set(testFilterQueries.map((t) => t.group));
+  testGroups.forEach((group) => {
+    describe(`filter with ${group}`, () => {
+      const tests = testFilterQueries.filter((t) => t.group == group);
 
-  const tests: Test[] = [
-    {
-      group: 'simple',
-      desc: 'Simple Test 1 with Regex',
-      query: 'gender:/Male|Female/ AND age:30',
-      expected: (p) => /Male|Female/.test(p.gender) && p.age === 30,
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Test 2 with Regex flags',
-      query: 'lastName:/^a/i AND age:38',
-      expected: (p) => /^a/i.test(p.lastName) && p.age === 38,
-    },
-    {
-      group: 'escaped',
-      desc: 'Escaped Regex Test 1',
-      query: '/.com$/',
-      expected: (p) => /\.com$/.test(p.email || ''),
-    },
-    {
-      group: 'escaped',
-      desc: 'Escaped Regex Test 2',
-      query: 'lastName:/^D.*e$/',
-      expected: (p) => /^D.*e$/.test(p.lastName),
-    },
-    {
-      group: 'nested',
-      desc: 'Nested Regex Test 1',
-      query: 'gender:/^(Male|Female|Non-binary)$/ AND email:/@/ AND age:/^3[0-9]$/',
-      expected: (p) =>
-        /^(Male|Female|Non-binary)$/.test(p.gender) && /@/.test(p.email || '') && /^3[0-9]$/.test(p.age.toString()),
-    },
-    {
-      group: 'nested',
-      desc: 'Nested Regex Test 2',
-      query: 'gender:/^(Male|Female)$/ AND lastName:/^H.*e$/',
-      expected: (p) => /^(Male|Female)$/.test(p.gender) && /^H.*e$/.test(p.lastName),
-    },
-  ];
+      tests.forEach((t) => {
+        it(`should ${t.desc}`, () => {
+          const result = filter(
+            new QueryParser(t.query),
+            personData,
+            new ReferenceResolver(t.variableResolver || {}, t.functionResolver),
+          );
+          expect(result).toEqual(personData.filter(t.expected));
+          t.resultLen(result.length);
+        });
+      });
 
-  tests.forEach((t) => {
-    it(`should ${t.desc}`, () => {
-      const result = filter(new QueryParser(t.query), personData);
-      expect(result).toEqual(personData.filter(t.expected));
-      expect(result.length).toMatchSnapshot();
-    });
-  });
-});
-
-describe('filter with Wildcard', () => {
-  type Test = {
-    group: 'simple' | 'complex';
-    desc: string;
-    query: string;
-    expected: (p: (typeof personData)[0]) => boolean;
-  };
-
-  const tests: Test[] = [
-    {
-      group: 'simple',
-      desc: 'Simple Wildcard Field Test 1',
-      query: '*Name:A*',
-      expected: (p) => /^A/.test(p.firstName) || /^A/.test(p.lastName),
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Wildcard Field Test 2',
-      query: 'firstName:*ose',
-      expected: (p) => /.*ose/.test(p.firstName),
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Wildcard Field Test 3',
-      query: 'first*me:Amb*',
-      expected: (p) => /^Amb/.test(p.firstName),
-    },
-    {
-      group: 'complex',
-      desc: 'Complex Wildcard Field Test 1',
-      query: 'firs?Name:Amb?ose',
-      expected: (p) => /Amb.ose/.test(p.firstName),
-    },
-    {
-      group: 'complex',
-      desc: 'Complex Wildcard Field Test 2',
-      query: 'fi*st?ame:Ambrose',
-      expected: (p) => /Ambrose/.test(p.firstName),
-    },
-    {
-      group: 'complex',
-      desc: 'Complex Wildcard Field Test 3',
-      query: '*s?Name:Amb*',
-      expected: (p) => /^Amb/.test(p.firstName) || /^Amb/.test(p.lastName),
-    },
-  ];
-
-  tests.forEach((t) => {
-    it(`should ${t.desc}`, () => {
-      const result = filter(new QueryParser(t.query), personData);
-      expect(result).toEqual(personData.filter(t.expected));
-      expect(result.length).toMatchSnapshot();
-    });
-  });
-});
-
-describe('filter with Ranges', () => {
-  type Test = {
-    group: 'simple' | 'complex';
-    desc: string;
-    query: string;
-    expected: (p: (typeof personData)[0]) => boolean;
-  };
-
-  const tests: Test[] = [
-    {
-      group: 'simple',
-      desc: 'Simple Range Test 1',
-      query: 'age:[0 TO 30]',
-      expected: (p) => p.age >= 0 && p.age <= 30,
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Range Test 2',
-      query: 'age:[20 TO *]',
-      expected: (p) => p.age >= 20,
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Range Test 3',
-      query: 'age:>=30 && age:[* TO 60]',
-      expected: (p) => p.age >= 30 && p.age >= 0 && p.age <= 60,
-    },
-    {
-      group: 'complex',
-      desc: 'Complex Range Test 1',
-      query: '(age:>=30 && age:<=60) || (age:>19 && age:<21)',
-      expected: (p) => p.age == 20 || (p.age >= 30 && p.age <= 60),
-    },
-  ];
-
-  tests.forEach((t) => {
-    it(`should ${t.desc}`, () => {
-      const result = filter(new QueryParser(t.query), personData);
-      expect(result).toEqual(personData.filter(t.expected));
-      expect(result.length).toMatchSnapshot();
-    });
-  });
-
-  it.todo('should Date Range Test 1', () => {
-    const query = 'date:[01-01-2022 TO 01-01-2024]';
-    const data = [
-      { id: 1, date: new Date('2023') },
-      { id: 2, date: new Date('2021') },
-    ];
-    const result = filter(new QueryParser(query), data);
-    expect(result).toMatchInlineSnapshot(`[]`);
-  });
-});
-
-describe('filter with variables', () => {
-  type Test = {
-    group: 'simple' | 'complex';
-    desc: string;
-    query: string;
-    expected: (p: (typeof personData)[0]) => boolean;
-    variableResolver?: VariableResolver;
-  };
-
-  const tests: Test[] = [
-    {
-      group: 'simple',
-      desc: 'Simple Global Variable Test 1',
-      query: 'age:$age',
-      expected: (p) => p.age === 30,
-      variableResolver: {
-        age: 30,
-      },
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Global Variable Test 2',
-      query: 'age:$age',
-      expected: (p) => p.age == undefined,
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Global Variable Test 3',
-      query: 'age:($age1 OR $age2)',
-      expected: (p) => p.age == 30 || p.age == 34,
-      variableResolver: {
-        age1: 30,
-        age2: 34,
-      },
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Global Variable Test 4',
-      query: 'age:$kid',
-      expected: (p) => p.age >= 0 && p.age <= 14,
-      variableResolver: {
-        kid: new QueryParser('age:[0 TO 14]'),
-      },
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Global Variable Test 5',
-      query: 'age:[$baby TO $teen]',
-      expected: (p) => p.age >= 0 && p.age <= 16,
-      variableResolver: {
-        baby: 0,
-        teen: 16,
-      },
-    },
-    {
-      group: 'complex',
-      desc: 'Complex Global Variable Test 1',
-      query: '$query1 AND (age:[$25 TO $50] OR $query2)',
-      expected: (p) =>
-        ((p.gender === 'Male' && p.age >= 20) || (p.gender === 'Female' && p.age >= 20)) && p.age >= 25 && p.age <= 50,
-      variableResolver: {
-        '25': 25,
-        '50': 50,
-        query2: new QueryParser('age:[$22 TO $55]'),
-        query1: new QueryParser('(gender:Male AND age:>=20) OR (gender:Female AND age:>=20)'),
-      },
-    },
-  ];
-
-  tests.forEach((t) => {
-    it(`should ${t.desc}`, () => {
-      const result = filter(new QueryParser(t.query), personData, new ReferenceResolver(t.variableResolver));
-      expect(result).toEqual(personData.filter(t.expected));
-      expect(result.length).toMatchSnapshot();
-    });
-  });
-});
-
-describe('filter with functions', () => {
-  type Test = {
-    group: 'simple' | 'complex';
-    desc: string;
-    query: string;
-    expected: (p: (typeof personData)[0]) => boolean;
-    functionResolver?: FunctionResolver;
-    variableResolver?: VariableResolver;
-  };
-
-  const tests: Test[] = [
-    {
-      group: 'simple',
-      desc: 'Simple Function Test 1',
-      query: 'age:determine($a) AND age:determine2($b)',
-      expected: (p) => p.age >= 0 && p.age <= 16,
-      functionResolver: {
-        determine: (node) => {
-          const firstParameter = node.params[0] as any;
-          if (firstParameter.value.value == 'kid') {
-            return new QueryParser('age:[0 TO 16]');
-          }
-        },
-        determine2: () => {
-          return { resolved: new QueryParser('age:[0 TO 16]') };
-        },
-      },
-      variableResolver: {
-        a: () => 'kid',
-      },
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Function Test 2',
-      query: 'age:tuple(t:[a [b [$c]]]) OR field:undefined_func()',
-      expected: (p) => p.age >= 0 && p.age <= 16,
-      functionResolver: {
-        tuple: (node, data: PersonData[]) => {
-          const tParam = node.params.find((p) => p.field == 't')!;
-          expect(tParam.value).toMatchInlineSnapshot(`
-            [
-              {
-                "type": "value",
-                "value": "a",
-              },
-              [
-                {
-                  "type": "value",
-                  "value": "b",
-                },
-                [
-                  {
-                    "type": "value",
-                    "value": "c",
-                  },
-                ],
-              ],
-            ]
-          `);
-
-          return {
-            data: data.filter((p) => p.age >= 0 && p.age <= 16),
-          };
-        },
-      },
-      variableResolver: {
-        c: 'c',
-      },
-    },
-    {
-      group: 'simple',
-      desc: 'Simple Function Test 3',
-      query: 'age:tuple(param1 t:[[a][b]] , c:12 d:11)',
-      expected: (p) => p.age == 16,
-      functionResolver: {
-        tuple: (node, data) => {
-          expect(node.params).toMatchInlineSnapshot(`
-            [
-              {
-                "field": null,
-                "quoted": false,
-                "restricted": true,
-                "type": "term",
-                "value": {
-                  "type": "value",
-                  "value": "param1",
-                },
-              },
-              {
-                "field": "t",
-                "type": "term-list",
-                "value": [
-                  [
-                    {
-                      "type": "value",
-                      "value": "a",
-                    },
-                  ],
-                  [
-                    {
-                      "type": "value",
-                      "value": "b",
-                    },
-                  ],
-                ],
-              },
-              {
-                "field": "c",
-                "type": "term",
-                "value": {
-                  "type": "value",
-                  "value": 12,
-                },
-              },
-              {
-                "field": "d",
-                "type": "term",
-                "value": {
-                  "type": "value",
-                  "value": 11,
-                },
-              },
-            ]
-          `);
-
-          return {
-            resolved: 16,
-          };
-        },
-      },
-      variableResolver: {
-        c: 'c',
-      },
-    },
-  ];
-
-  tests.forEach((t) => {
-    it(`should ${t.desc}`, () => {
-      const result = filter(
-        new QueryParser(t.query),
-        personData,
-        new ReferenceResolver(t.variableResolver || {}, t.functionResolver),
-      );
-      expect(result).toEqual(personData.filter(t.expected));
-      expect(result.length).toMatchSnapshot();
+      if (group == 'range') {
+        it.todo('should Date Range Test 1', () => {
+          const query = 'date:[01-01-2022 TO 01-01-2024]';
+          const data = [
+            { id: 1, date: new Date('2023') },
+            { id: 2, date: new Date('2021') },
+          ];
+          const result = filter(new QueryParser(query), data);
+          expect(result).toMatchInlineSnapshot(`[]`);
+        });
+      }
     });
   });
 });

@@ -177,5 +177,5 @@ export type PersonData = {
   firstName: string;
   lastName: string;
   age: number;
-  email: string;
+  email: string | undefined | null;
 };

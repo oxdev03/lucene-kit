@@ -1,8 +1,14 @@
 import { RangeOperator } from '../types/ast';
+import { FlatType } from '../types/data';
 import { isWildCardString } from '../types/guards';
 
-type FlatType = string | number | undefined | boolean | null | Date;
-
+/**
+ * Tests if a value matches a string or number filter.
+ * @param value The value to test.
+ * @param filter The filter to match against.
+ * @param quoted whether it should be a strict message.
+ * @returns True if the value matches the filter, otherwise false.
+ */
 export function testString(value: FlatType, filter: string | number, quoted: boolean): boolean {
   if (quoted) {
     return String(value) == filter;
@@ -13,6 +19,12 @@ export function testString(value: FlatType, filter: string | number, quoted: boo
   }
 }
 
+/**
+ * Tests if a value matches a regular expression filter.
+ * @param value The value to test.
+ * @param filter The regular expression filter.
+ * @returns True if the value matches the filter, otherwise false.
+ */
 export function testRegexp(value: FlatType, filter: RegExp) {
   if (value == undefined || value == null) {
     return false;
@@ -20,12 +32,25 @@ export function testRegexp(value: FlatType, filter: RegExp) {
   return filter.test(String(value));
 }
 
+/**
+ * Tests if a value matches a wildcard filter.
+ * @param value The value to test.
+ * @param filter The wildcard filter.
+ * @returns True if the value matches the wildcard filter, otherwise false.
+ */
 export function testWildcard(value: FlatType, filter: string): boolean {
   const regexPattern = escapeRegExp(filter).replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
   const regex = new RegExp(`^${regexPattern}$`);
   return testRegexp(value, regex);
 }
 
+/**
+ * Tests if a value matches a range filter.
+ * @param operator The range operator.
+ * @param value The value to test.
+ * @param filter The filter to compare against.
+ * @returns True if the value matches the range filter, otherwise false.
+ */
 export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter?: string | number) {
   switch (operator) {
     case 'gte':
@@ -41,6 +66,13 @@ export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter
   }
 }
 
+/**
+ * Compares two values of possibly different types.
+ * @param a The first value to compare.
+ * @param b The second value to compare.
+ * @param falseValue The value to return if comparison is not applicable.
+ * @returns -1 if a < b, 0 if a == b, 1 if a > b, or the falseValue if comparison is not applicable.
+ */
 function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
   if (typeof a === 'number') {
     return a - Number(b);
@@ -57,6 +89,11 @@ function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
   }
 }
 
+/**
+ * Escapes special characters in a string for use in a regular expression.
+ * @param str The string to escape.
+ * @returns The escaped string.
+ */
 function escapeRegExp(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

@@ -15,6 +15,7 @@ import {
 import { FlatType } from '../types/data';
 import {
   isConjunction,
+  isEmptyNode,
   isFunctionNode,
   isGroupLike,
   isNegation,
@@ -32,19 +33,40 @@ import QueryParser from '../xlucene';
 import ReferenceResolver from './resolver';
 import { testRangeNode, testRegexp, testString, testWildcard } from '../filter/test-value';
 
+/**
+ * Class for evaluating an abstract syntax tree (AST).
+ * Currently used for filtering data
+ */
 export class ASTEvaluator {
+  /**
+   * Creates an instance of ASTEvaluator.
+   * @param ast The abstract syntax tree (AST) to evaluate.
+   * @param resolver Optional reference resolver to resolve variables and functions.
+   */
   constructor(private readonly ast: Node, private readonly resolver?: ReferenceResolver) {}
 
+  /**
+   * Evaluates the AST and filters the provided data.
+   * @param data The data to filter based on the AST.
+   * @returns The filter data.
+   */
   evaluate<T = any>(data: T[]): T[] {
     return this.evaluateAST(this.ast, data);
   }
 
+  /**
+   * Recursively evaluates nodes in the AST.
+   * @param node The current node to evaluate.
+   * @param data The current data.
+   * @returns The filtered data.
+   * @private
+   */
   private evaluateAST<T = any>(node: Node, data: T[]): T[] {
     if (!node) return data;
 
-    //console.log(node, data);
-
-    if (isGroupLike(node)) {
+    if (isEmptyNode(node)) {
+      return data;
+    } else if (isGroupLike(node)) {
       return this.evaluateLogicalGroup(node, data);
     } else if (isConjunction(node)) {
       return this.evaluateConjunction(node, data);
@@ -67,6 +89,13 @@ export class ASTEvaluator {
     return data;
   }
 
+  /**
+   * Evaluates a logical group node in the AST (OR, Field Group).
+   * @param node The logical group or field group node to evaluate.
+   * @param data The data to evaluate based on the AST.
+   * @returns The filtered data.
+   * @private
+   */
   private evaluateLogicalGroup<T = any>(node: GroupLikeNode, data: any[]): T[] {
     let result: any[] = [];
 
@@ -78,6 +107,12 @@ export class ASTEvaluator {
     return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
   }
 
+  /**
+   * Evaluates a variable node in the AST.
+   * @param node The variable node to evaluate.
+   * @returns The a resolved node or a AST
+   * @private
+   */
   private evaluateVariable(node: VariableNode): Node {
     const resolved = this.resolver!.resolveVariable(node);
 
@@ -93,6 +128,12 @@ export class ASTEvaluator {
     }
   }
 
+  /**
+   * Evaluates an inner variable node in the AST.
+   * @param node The inner variable node to evaluate.
+   * @returns The resolved node.
+   * @private
+   */
   private evaluateInnerVariable(node: FieldValueVariable): FieldValue<any> {
     const resolved = this.resolver!.resolveVariable(node);
     return {
@@ -101,6 +142,13 @@ export class ASTEvaluator {
     };
   }
 
+  /**
+   * Evaluates a function node in the AST.
+   * @param node The function node to evaluate.
+   * @param data current data for filtering.
+   * @returns The resolved node, AST or filtered data.
+   * @private
+   */
   private evaluateFunctionNode<T = any>(node: FunctionNode, data: T): [Node | undefined, T] {
     const resolveVariableInTermList = (
       term: FieldValue<any> | FieldValue<any>[],
@@ -164,10 +212,24 @@ export class ASTEvaluator {
     }
   }
 
+  /**
+   * Evaluates a term-like node in the AST.
+   * @param node The term-like node to evaluate.
+   * @param data The current data to filter based on the AST.
+   * @returns The filtered data.
+   * @private
+   */
   private evaluateTermLike<T = any>(node: TermLikeNode, data: any[]): T[] {
     return data.filter((item) => this.matchTermLike(node, item));
   }
 
+  /**
+   * Determines if a term-like node matches a given item in the data.
+   * @param node The term-like node to match.
+   * @param item The item from the data to match against.
+   * @returns True if the node matches the item, otherwise false.
+   * @private
+   */
   private matchTermLike(node: TermLikeNode, item: any): boolean {
     const testValue = (value: FlatType): boolean => {
       if (isTerm(node)) {
@@ -197,11 +259,25 @@ export class ASTEvaluator {
     return false;
   }
 
+  /**
+   * Evaluates a negation node in the AST (NOT, !).
+   * @param node The negation node to evaluate.
+   * @param data The current data to filter based on the AST.
+   * @returns The filtered data.
+   * @private
+   */
   private evaluateNegation<T = any>(node: Negation, data: any[]): T[] {
     const filteredData = this.evaluateAST(node.node, data);
     return data.filter((item: any) => !filteredData.includes(item));
   }
 
+  /**
+   * Evaluates a conjunction node in the AST (AND).
+   * @param node The conjunction node to evaluate.
+   * @param data The current data to filter based on the AST.
+   * @returns The filtered data.
+   * @private
+   */
   private evaluateConjunction<T = any>(node: Conjunction, data: any[]): T[] {
     let result = data;
     for (const subNode of node.nodes) {

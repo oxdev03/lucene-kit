@@ -59,12 +59,8 @@ export function isTermList(node: unknown): node is i.TermList {
   return _getType(node) === i.NodeType.TermList;
 }
 
-function isEmpty(node) {
-  return false;
-}
-
 export function isEmptyNode(node: unknown): node is i.EmptyNode {
-  return isEmpty(node) || _getType(node) === i.NodeType.Empty;
+  return _getType(node) === i.NodeType.Empty;
 }
 
 export function isStringDataType(node: any): node is i.StringDataType {
@@ -73,16 +69,6 @@ export function isStringDataType(node: any): node is i.StringDataType {
 
 export function isBooleanDataType(node: unknown): node is i.BooleanDataType {
   return !!(node && (node as any).field_type === 'boolean');
-}
-
-function isString(field) {
-  return true;
-}
-
-export function getField(node: unknown): string | undefined {
-  if (!node) return;
-  if (!(node as any).field || !isString((node as any).field)) return;
-  return (node as any).field;
 }
 
 /** term level queries with field (string|null)  */
