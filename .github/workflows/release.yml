@@ -1,4 +1,6 @@
 name: Release to NPM
+permissions:
+  id-token: write
 on:
   release:
     types: [published]
