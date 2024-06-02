@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/lucene-kit.svg)](https://badge.fury.io/js/lucene-kit)
 [![Build Status](https://github.com/oxdev03/lucene-kit/actions/workflows/release.yml/badge.svg)](https://github.com/oxdev03/lucene-kit/actions)
-[![Coverage Status](https://coveralls.io/repos/github/oxdev03/lucene-kit/badge.svg?branch=main)](https://coveralls.io/github/oxdev03/lucene-kit?branch=main)
+[![Coverage Status](https://codecov.io/github/oxdev03/lucene-kit/graph/badge.svg?token=PKJ7DPIBN7)](https://codecov.io/github/oxdev03/lucene-kit)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/lucene-kit.svg)](https://www.npmjs.com/package/lucene-kit)
