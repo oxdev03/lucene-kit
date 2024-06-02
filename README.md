@@ -1,11 +1,11 @@
 # Lucene-Kit
 
-[![npm version](https://badge.fury.io/js/lucene-kit.svg)](https://badge.fury.io/js/lucene-kit)
+[![NPM Version](https://img.shields.io/npm/v/lucene-kit)](https://www.npmjs.com/package/lucene-kit)
 [![Build Status](https://github.com/oxdev03/lucene-kit/actions/workflows/release.yml/badge.svg)](https://github.com/oxdev03/lucene-kit/actions)
 [![Coverage Status](https://codecov.io/github/oxdev03/lucene-kit/graph/badge.svg?token=PKJ7DPIBN7)](https://codecov.io/github/oxdev03/lucene-kit)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Downloads](https://img.shields.io/npm/dt/lucene-kit.svg)](https://www.npmjs.com/package/lucene-kit)
+[![NPM Downloads](https://img.shields.io/npm/d18m/lucene-kit)](https://www.npmjs.com/package/lucene-kit)
 
 Lucene-Kit offers a lightweight and extended Lucene-like parser, search engine, and serializer for JavaScript and TypeScript applications.
 
