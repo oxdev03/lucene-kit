@@ -1,4 +1,30 @@
 {
+  "name": "lucene-kit",
+  "description": "Lightweight and extensive, Lucene-like solution provides powerful full-text search, serialization, and parser for your application.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oxdev03/lucene-kit"
+  },
+  "bugs": {
+    "url": "https://github.com/oxdev03/lucene-kit/issues"
+  },
+  "author": {
+    "name": "oxdev03",
+    "url": "https://github.com/oxdev03"
+  },
+  "keywords": [
+    "lucene",
+    "filter",
+    "solr",
+    "peggy",
+    "query",
+    "search",
+    "query-engine",
+    "filtering",
+    "nosql"
+  ],
+  "license": "MIT",
   "scripts": {
     "prebuild": "node ./scripts/generate-engine.js",
     "build": "tsc --build",
