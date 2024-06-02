@@ -19,6 +19,10 @@ jobs:
            node-version: 20
            registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Bundle Package
         run: npm run bundle
+      - name: Publish to NPM
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
