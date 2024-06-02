@@ -35,6 +35,9 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "node ./scripts/generate-engine.js",
     "build": "tsc --build",
