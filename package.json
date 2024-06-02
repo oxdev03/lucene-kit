@@ -44,6 +44,7 @@
     "prebundle": "npm run prebuild",
     "bundle": "tsup src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest",
+    "test:coverage": "vitest --coverage",
     "bench": "vitest bench",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
