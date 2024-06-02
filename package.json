@@ -25,9 +25,21 @@
     "nosql"
   ],
   "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "prebuild": "node ./scripts/generate-engine.js",
     "build": "tsc --build",
+    "prebundle": "npm run prebuild",
+    "bundle": "tsup src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest",
     "bench": "vitest bench",
     "lint": "eslint .",
@@ -47,6 +59,7 @@
     "globals": "^15.3.0",
     "prettier": "3.3.0",
     "ts-pegjs": "^4.2.1",
+    "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.11.0",
     "vitest": "^1.6.0"
