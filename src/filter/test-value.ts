@@ -51,7 +51,11 @@ export function testWildcard(value: FlatType, filter: string): boolean {
  * @param filter The filter to compare against.
  * @returns True if the value matches the range filter, otherwise false.
  */
-export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter?: string | number) {
+export function testRangeNode(
+  operator?: RangeOperator,
+  value?: FlatType,
+  filter?: string | number | boolean | undefined | null,
+) {
   switch (operator) {
     case 'gte':
       return compareValues(value, filter, -1) >= 0;
@@ -76,14 +80,14 @@ export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter
 function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
   if (typeof a === 'number') {
     return a - Number(b);
-  } else if (typeof a === 'string') {
-    return a.localeCompare(String(b));
+  } else if (typeof b === 'string' && isWildCardString(b)) {
+    return testWildcard(a, b) ? 0 : -1;
   } else if (a instanceof Date) {
     return a.getTime() - new Date(String(b)).getTime();
   } else if (typeof b === 'boolean' || typeof a === 'boolean') {
     return a == b ? 1 : 0;
-  } else if (typeof b === 'string' && isWildCardString(b)) {
-    return testWildcard(a, b) ? 0 : -1;
+  } else if (typeof a === 'string') {
+    return a.localeCompare(String(b));
   } else {
     return falseValue;
   }
