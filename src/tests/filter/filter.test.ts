@@ -5,7 +5,7 @@ import testFilterQueries from '../__fixtures__/filter';
 import ReferenceResolver from '../../handlers/resolver';
 
 describe(`filter`, () => {
-  const testGroups = new Set(testFilterQueries.map((t) => t.group));
+  const testGroups = new Set(testFilterQueries.map((t) => t.group)).add('date');
   testGroups.forEach((group) => {
     describe(`filter with ${group}`, () => {
       const tests = testFilterQueries.filter((t) => t.group == group);
@@ -22,15 +22,69 @@ describe(`filter`, () => {
         });
       });
 
-      if (group == 'range') {
-        it.todo('should Date Range Test 1', () => {
-          const query = 'date:[01-01-2022 TO 01-01-2024]';
+      if (group == 'date') {
+        it('should Date Range Test 1', () => {
+          const query = 'date:[01-01-2022 TO 2024]';
           const data = [
             { id: 1, date: new Date('2023') },
             { id: 2, date: new Date('2021') },
+            { id: 3, date: new Date('2025') },
+            { id: 4, date: new Date('2023') },
           ];
           const result = filter(new QueryParser(query), data);
-          expect(result).toMatchInlineSnapshot(`[]`);
+          expect(result).toMatchInlineSnapshot(`
+            [
+              {
+                "date": 2023-01-01T00:00:00.000Z,
+                "id": 1,
+              },
+              {
+                "date": 2023-01-01T00:00:00.000Z,
+                "id": 4,
+              },
+            ]
+          `);
+        });
+
+        it('should Date Range Test 2', () => {
+          const query = 'date:[2023 TO *]';
+          const data = [
+            { id: 1, date: new Date('2023') },
+            { id: 2, date: new Date('2021') },
+            { id: 3, date: new Date('2025') },
+          ];
+          const result = filter(new QueryParser(query), data);
+          expect(result).toMatchInlineSnapshot(`
+            [
+              {
+                "date": 2023-01-01T00:00:00.000Z,
+                "id": 1,
+              },
+              {
+                "date": 2025-01-01T00:00:00.000Z,
+                "id": 3,
+              },
+            ]
+          `);
+        });
+
+        it('should Simple Date Test 1', () => {
+          const query = 'date:2023-01-01';
+          const data = [
+            { id: 1, date: new Date('2023') },
+            { id: 1, date: new Date('2023-11-31') },
+            { id: 2, date: new Date('2021') },
+            { id: 3, date: new Date('2025') },
+          ];
+          const result = filter(new QueryParser(query), data);
+          expect(result).toMatchInlineSnapshot(`
+            [
+              {
+                "date": 2023-01-01T00:00:00.000Z,
+                "id": 1,
+              },
+            ]
+          `);
         });
       }
     });

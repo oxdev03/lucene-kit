@@ -299,13 +299,19 @@ describe('iterate', () => {
   });
 
   it('should iterate over date', () => {
-    // FIXME: class without any properties should be stringified
     const obj = {
       date: new Date('2024'),
     };
 
     const result = [...iterate(obj)];
-    expect(result).toMatchInlineSnapshot(`[]`);
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "date",
+          2024-01-01T00:00:00.000Z,
+        ],
+      ]
+    `);
   });
 
   it('should iterate over class instance', () => {

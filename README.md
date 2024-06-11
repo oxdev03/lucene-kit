@@ -160,6 +160,10 @@ age:[0 TO 20]
 # Search within a range (from, infinity) (-infinity, to)
 age:[0 TO *]
 age:[* TO 20]
+
+# Search date (Requirement: field is of type date and provided date is instantiable by new Date(...))
+birth:[2000 TO '2004-01-01']
+birth:[2020 TO *]
 ```
 
 #### Wildcard
@@ -389,7 +393,6 @@ The following Lucene features are not currently supported but may be added in th
 
 The following filters are not yet supported:
 
-- Date Ranges (e.g., `date_field:['2021' TO '2024']`)
 - Iterating over Array Object key without index like (e.g., `field.key_in_array`, working `field.*.key_in_array`)
 
 ## Contributing
