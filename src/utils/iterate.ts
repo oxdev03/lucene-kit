@@ -6,6 +6,8 @@ import { isWildCardString } from '../types/guards';
 type AnyObject = { [key: string]: any };
 type IterationResult = [string, any];
 
+const NOT_ITERABLE = [Date];
+
 /**
  * Iterates over an object and yields key-value pairs. Supports wildcard matching and maximum depth.
  * @param obj - The object to iterate over.
@@ -34,7 +36,7 @@ export default function* iterate(
     const isTrailingWildcard = lastField?.endsWith('*') && !currentField;
     const isWildcard = isWildCardString(currentField);
 
-    if (typeof obj === 'object' && obj !== null) {
+    if (typeof obj === 'object' && obj !== null && !NOT_ITERABLE.some((cls) => obj instanceof cls)) {
       // If the object is not an array and has the current field, continue iteration.
       if (!isWildcard && Object.prototype.hasOwnProperty.call(obj, currentField)) {
         const newPath = currentPath.concat(currentField);

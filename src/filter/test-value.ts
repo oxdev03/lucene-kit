@@ -2,6 +2,8 @@ import { RangeOperator } from '../types/ast';
 import { FlatType } from '../types/data';
 import { isWildCardString } from '../types/guards';
 
+const MAX_TIMESTAMP = 8.64e15;
+
 /**
  * Tests if a value matches a string or number filter.
  * @param value The value to test.
@@ -11,11 +13,11 @@ import { isWildCardString } from '../types/guards';
  */
 export function testString(value: FlatType, filter: string | number | boolean, quoted: boolean): boolean {
   if (quoted) {
-    return String(value) == filter;
-  } else if (typeof filter == 'string') {
-    return String(value).includes(filter);
+    return String(value) == String(filter);
+  } else if (value instanceof Date) {
+    return value.toLocaleString().includes(new Date(String(filter)).toLocaleString());
   } else {
-    return value == filter;
+    return String(value).includes(String(filter));
   }
 }
 
@@ -83,7 +85,7 @@ function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
   } else if (typeof b === 'string' && isWildCardString(b)) {
     return testWildcard(a, b) ? 0 : -1;
   } else if (a instanceof Date) {
-    return a.getTime() - new Date(String(b)).getTime();
+    return a.getTime() - new Date(b == Infinity ? MAX_TIMESTAMP : String(b)).getTime();
   } else if (typeof b === 'boolean' || typeof a === 'boolean') {
     return a == b ? 1 : 0;
   } else if (typeof a === 'string') {
