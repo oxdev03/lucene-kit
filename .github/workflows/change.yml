@@ -59,7 +59,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: Shared Setup
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/actions/setup
 #      - name: Run Benchmarks
 #        uses: CodSpeedHQ/action@v2
 #        with:
