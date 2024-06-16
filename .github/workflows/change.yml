@@ -52,10 +52,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
   bench:
     runs-on: ubuntu-latest
-    needs: test
+#    needs: test
     steps:
       - name: Shared Setup
-        uses: ./.github/actions/shared-steps
+        uses: ./.github/workflows/setup
 #      - name: Run Benchmarks
 #        uses: CodSpeedHQ/action@v2
 #        with:
