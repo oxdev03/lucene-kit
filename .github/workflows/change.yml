@@ -54,6 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 #    needs: test
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Shared Setup
         uses: ./.github/workflows/setup
 #      - name: Run Benchmarks
