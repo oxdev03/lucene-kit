@@ -36,7 +36,8 @@ const testFunctionQueries: TestFilterQuery[] = [
     functionResolver: {
       tuple: (node, data: PersonData[]) => {
         const tParam = node.params.find((p) => p.field == 't')!;
-        expect(tParam.value).toMatchInlineSnapshot(`
+        if (process.env.MODE !== 'benchmark') {
+          expect(tParam.value).toMatchInlineSnapshot(`
           [
             {
               "type": "value",
@@ -56,6 +57,7 @@ const testFunctionQueries: TestFilterQuery[] = [
             ],
           ]
         `);
+        }
 
         return {
           data: data.filter((p) => p.age >= 0 && p.age <= 16),
@@ -75,7 +77,8 @@ const testFunctionQueries: TestFilterQuery[] = [
     expected: (p) => p.age == 16,
     functionResolver: {
       tuple: (node) => {
-        expect(node.params).toMatchInlineSnapshot(`
+        if (process.env.MODE !== 'benchmark') {
+          expect(node.params).toMatchInlineSnapshot(`
             [
               {
                 "field": null,
@@ -123,7 +126,7 @@ const testFunctionQueries: TestFilterQuery[] = [
               },
             ]
           `);
-
+        }
         return {
           resolved: 16,
         };

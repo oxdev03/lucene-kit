@@ -50,3 +50,14 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+  bench:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Shared Setup
+        uses: ./.github/actions/shared-steps
+#      - name: Run Benchmarks
+#        uses: CodSpeedHQ/action@v2
+#        with:
+#          run: npm run bench
+#          token: ${{ secrets.CODSPEED_TOKEN }}
