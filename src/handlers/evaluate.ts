@@ -294,6 +294,6 @@ export class ASTEvaluator {
     for (const subNode of node.nodes) {
       result = this.evaluateAST(subNode, result);
     }
-    return result;
+    return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
   }
 }
