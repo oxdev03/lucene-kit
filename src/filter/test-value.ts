@@ -17,7 +17,7 @@ export function testString(value: FlatType, filter: string | number | boolean, q
   } else if (value instanceof Date) {
     return value.toLocaleString().includes(new Date(String(filter)).toLocaleString());
   } else {
-    return String(value).includes(String(filter));
+    return String(value).toLocaleLowerCase().includes(String(filter).toLowerCase());
   }
 }
 
