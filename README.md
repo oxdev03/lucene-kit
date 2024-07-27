@@ -393,7 +393,7 @@ The following Lucene features are not currently supported but may be added in th
 
 The following filters are not yet supported:
 
-- Iterating over Array Object key without index like (e.g., `field.key_in_array`, working `field.*.key_in_array`)
+- ~~Iterating over Array Object key without index like (e.g., `field.key_in_array`, working `field.*.key_in_array`)~~
 
 ## Contributing
 
