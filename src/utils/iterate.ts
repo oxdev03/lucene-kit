@@ -4,6 +4,7 @@ import { testWildcard } from '../filter/test-value';
 import { isWildCardString } from '../types/guards';
 
 type AnyObject = { [key: string]: any };
+type IterationResult = [string, any];
 
 const NOT_ITERABLE = [Date];
 
@@ -14,7 +15,11 @@ const NOT_ITERABLE = [Date];
  * @param maxDepth - The maximum depth to iterate into. Defaults to Infinity.
  * @yields Key-value pairs in the format [field, value].
  */
-export default function* iterate(obj: AnyObject | any[], field: string = '', maxDepth: number = Infinity): Generator {
+export default function* iterate(
+  obj: AnyObject | any[],
+  field: string = '',
+  maxDepth: number = Infinity,
+): Generator<IterationResult> {
   const splittedFields = field.split('.'); // Split the field pattern into individual components
 
   /**
@@ -23,7 +28,7 @@ export default function* iterate(obj: AnyObject | any[], field: string = '', max
    * @param currentPath The current path in the object hierarchy.
    * @param depth The current depth of recursion.
    */
-  function* _iterate(obj: AnyObject | any[], currentPath: string[], depth: number): Generator {
+  function* _iterate(obj: AnyObject | any[], currentPath: string[], depth: number): Generator<IterationResult> {
     if (depth > maxDepth) return; // Stop recursion if maximum depth is exceeded
 
     const currentField = splittedFields[currentPath.length]; // Get the current field to match
