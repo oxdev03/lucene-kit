@@ -218,13 +218,13 @@ describe('iterate', () => {
     `);
   });
 
-  it.todo('should handle array elements as objects', () => {
+  it('should handle array elements as objects', () => {
     const arrayObj = {
       arr: [{ key: 'value1' }, { key: 'value2' }, { key2: 'value3' }],
     };
     const result = [...iterate(arrayObj, 'arr.*.key')];
     const alternativeResult = [...iterate(arrayObj, 'arr.key')];
-    expect(result).toMatchInlineSnapshot(`
+    expect(alternativeResult).toMatchInlineSnapshot(`
       [
         [
           "arr.0.key",
@@ -236,7 +236,33 @@ describe('iterate', () => {
         ],
       ]
     `);
-    // FIXME: able to access array keys without *
+
+    expect(alternativeResult).toEqual(result);
+  });
+
+  it('should handle array elements as objects with nested array objects', () => {
+    const arrayObj = {
+      arr: [
+        {
+          key: [
+            {
+              foo: 'bar',
+            },
+          ],
+        },
+      ],
+    };
+    const alternativeResult = [...iterate(arrayObj, 'arr.key.foo')];
+    const result = [...iterate(arrayObj, 'arr.*.key.*.foo')];
+    expect(alternativeResult).toMatchInlineSnapshot(`
+      [
+        [
+          "arr.0.key.0.foo",
+          "bar",
+        ],
+      ]
+    `);
+
     expect(alternativeResult).toEqual(result);
   });
 
