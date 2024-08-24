@@ -81,11 +81,7 @@ export class ASTEvaluator {
       return this.evaluateAST(this.evaluateVariable(node), data);
     } else if (isFunctionNode(node)) {
       const [query, filteredData] = this.evaluateFunctionNode(node, data);
-      if (!query) {
-        return filteredData;
-      } else {
-        return this.evaluateAST(query, data);
-      }
+      return query ? this.evaluateAST(query, data) : filteredData;
     } else if (isTermType(node)) {
       return this.evaluateTermLike(node, data);
     }
@@ -142,7 +138,7 @@ export class ASTEvaluator {
   private evaluateInnerVariable(node: FieldValueVariable): FieldValue<FlatType> {
     const resolved = this.resolver!.resolveVariable(node);
     if (resolved instanceof QueryParser) {
-      throw new Error(`${node.type}: ${node.value} can't resolve variable to ast inside function or range node`);
+      throw new TypeError(`${node.type}: ${node.value} can't resolve variable to ast inside function or range node`);
     }
     return {
       type: 'value',

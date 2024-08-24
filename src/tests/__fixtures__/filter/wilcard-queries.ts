@@ -7,7 +7,7 @@ const testWildCardQueries: TestFilterQuery[] = [
     difficulty: 'simple',
     desc: 'Simple Wildcard Field Test 1',
     query: '*Name:A*',
-    expected: (p) => /^A/.test(p.firstName) || /^A/.test(p.lastName),
+    expected: (p) => p.firstName.startsWith('A') || p.lastName.startsWith('A'),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`12`),
   },
   {
@@ -23,7 +23,7 @@ const testWildCardQueries: TestFilterQuery[] = [
     difficulty: 'simple',
     desc: 'Simple Wildcard Field Test 3',
     query: 'first*me:Amb*',
-    expected: (p) => /^Amb/.test(p.firstName),
+    expected: (p) => p.firstName.startsWith('Amb'),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`1`),
   },
   {
@@ -47,7 +47,7 @@ const testWildCardQueries: TestFilterQuery[] = [
     difficulty: 'complex',
     desc: 'Complex Wildcard Field Test 3',
     query: '*s?Name:Amb*',
-    expected: (p) => /^Amb/.test(p.firstName) || /^Amb/.test(p.lastName),
+    expected: (p) => p.firstName.startsWith('Amb') || p.lastName.startsWith('Amb'),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`1`),
   },
 ];

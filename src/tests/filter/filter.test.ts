@@ -6,11 +6,11 @@ import ReferenceResolver from '../../handlers/resolver';
 
 describe(`filter`, () => {
   const testGroups = new Set(testFilterQueries.map((t) => t.group)).add('date');
-  testGroups.forEach((group) => {
+  for (const group of testGroups) {
     describe(`filter with ${group}`, () => {
       const tests = testFilterQueries.filter((t) => t.group == group);
 
-      tests.forEach((t) => {
+      for (const t of tests) {
         it(`should ${t.desc}`, () => {
           const result = filter(
             new QueryParser(t.query),
@@ -20,7 +20,7 @@ describe(`filter`, () => {
           expect(result).toEqual(personData.filter(t.expected));
           t.resultLen(result.length);
         });
-      });
+      }
 
       if (group == 'date') {
         it('should Date Range Test 1', () => {
@@ -88,5 +88,5 @@ describe(`filter`, () => {
         });
       }
     });
-  });
+  }
 });

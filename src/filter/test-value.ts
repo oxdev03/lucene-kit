@@ -41,7 +41,9 @@ export function testRegexp(value: FlatType, filter: RegExp) {
  * @returns True if the value matches the wildcard filter, otherwise false.
  */
 export function testWildcard(value: FlatType, filter: string): boolean {
-  const regexPattern = escapeRegExp(filter).replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+  const regexPattern = escapeRegExp(filter)
+    .replaceAll(String.raw`\*`, '.*')
+    .replaceAll(String.raw`\?`, '.');
   const regex = new RegExp(`^${regexPattern}$`);
   return testRegexp(value, regex);
 }
@@ -59,16 +61,21 @@ export function testRangeNode(
   filter?: string | number | boolean | undefined | null,
 ) {
   switch (operator) {
-    case 'gte':
+    case 'gte': {
       return compareValues(value, filter, -1) >= 0;
-    case 'gt':
+    }
+    case 'gt': {
       return compareValues(value, filter, -1) > 0;
-    case 'lt':
+    }
+    case 'lt': {
       return compareValues(value, filter, 1) < 0;
-    case 'lte':
+    }
+    case 'lte': {
       return compareValues(value, filter, 1) <= 0;
-    default:
+    }
+    default: {
       return true;
+    }
   }
 }
 
@@ -101,5 +108,6 @@ function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
  * @returns The escaped string.
  */
 function escapeRegExp(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // eslint-disable-next-line unicorn/better-regex
+  return str.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }

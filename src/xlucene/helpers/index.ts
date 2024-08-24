@@ -27,11 +27,11 @@ import * as i from '../../types/ast';
 import * as utils from '../../types/guards';
 
 function validateScopedChars(chars: string[]) {
-  chars.forEach((char, ind) => {
-    if (char === '.' && chars[ind + 1] === '.') {
+  for (const [idx, char] of chars.entries()) {
+    if (char === '.' && chars[idx + 1] === '.') {
       throw new Error(`Invalid scoped variable "@${chars.join('')}", char "." cannot be next to another "." char`);
     }
-  });
+  }
 }
 
 /**

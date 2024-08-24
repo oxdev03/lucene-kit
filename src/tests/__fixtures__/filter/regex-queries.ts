@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/better-regex */
 import { expect } from 'vitest';
 import { TestFilterQuery } from '.';
 

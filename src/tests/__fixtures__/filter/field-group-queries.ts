@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-string-starts-ends-with */
 import { expect } from 'vitest';
 import { TestFilterQuery } from '.';
 

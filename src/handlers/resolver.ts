@@ -90,11 +90,7 @@ export default class ReferenceResolver {
     const varName = typeof node.value == 'object' ? node.value.value : node.value;
     const resolver = this.variablesResolver[varName];
     if (varName && resolver !== undefined) {
-      if (typeof resolver == 'function') {
-        return resolver(node);
-      } else {
-        return resolver;
-      }
+      return typeof resolver == 'function' ? resolver(node) : resolver;
     }
 
     return undefined;
@@ -109,10 +105,6 @@ export default class ReferenceResolver {
   resolveFunction<T = any>(node: FunctionNode, data: T): FunctionResolverReturnType<T> {
     const funcName = node.name;
     const resolver = this.functionResolver[funcName];
-    if (funcName && resolver !== undefined) {
-      return resolver(node, data);
-    } else {
-      return undefined;
-    }
+    return funcName && resolver !== undefined ? resolver(node, data) : undefined;
   }
 }
