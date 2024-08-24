@@ -1,5 +1,3 @@
-import filter from './filter';
-import ReferenceResolver from './handlers/resolver';
-import QueryParser from './xlucene';
-
-export { filter, QueryParser, ReferenceResolver };
+export { default as filter } from './filter';
+export { default as QueryParser } from './xlucene';
+export { default as ReferenceResolver } from './handlers/resolver';

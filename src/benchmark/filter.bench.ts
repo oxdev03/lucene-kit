@@ -7,7 +7,7 @@ import ReferenceResolver from '../handlers/resolver';
 const testGroups = new Set(testFilterQueries.map((t) => t.group));
 
 describe('Filter', () => {
-  testGroups.forEach((group) => {
+  for (const group of testGroups) {
     const testQuery = testFilterQueries.filter((t) => t.group == group);
     // prepare ast, so its not considered in benchmark
     const queries = testQuery.map((t) => {
@@ -15,9 +15,9 @@ describe('Filter', () => {
       return () => filter(ast, personData, new ReferenceResolver(t.variableResolver || {}, t.functionResolver));
     });
     bench(`should filter with ${group}`, () => {
-      queries.forEach((filterData) => {
+      for (const filterData of queries) {
         filterData();
-      });
+      }
     });
-  });
+  }
 });

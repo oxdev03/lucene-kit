@@ -32,7 +32,7 @@ export default function* iterate(
     if (depth > maxDepth) return; // Stop recursion if maximum depth is exceeded
 
     const currentField = splittedFields[currentPath.length]; // Get the current field to match
-    const lastField = splittedFields.length ? splittedFields[splittedFields.length - 1] : ''; // Get the last field in the pattern
+    const lastField = splittedFields.length > 0 ? splittedFields.at(-1) : ''; // Get the last field in the pattern
     const isTrailingWildcard = lastField?.endsWith('*') && !currentField; // Check if it's a trailing wildcard pattern
     const isWildcard = isWildCardString(currentField); // Check if the current field is a wildcard
 
@@ -44,7 +44,7 @@ export default function* iterate(
 
       // If the object has the current field and it's not an array with inner key
       if (!isWildcard && Object.prototype.hasOwnProperty.call(obj, currentField) && !arrayWithInnerKey) {
-        const newPath = currentPath.concat(currentField); // Create new path
+        const newPath = [...currentPath, currentField]; // Create new path
         yield* _iterate(obj[currentField], newPath, depth + 1); // Recurse into the next level
       } else {
         if (arrayWithInnerKey) {
@@ -56,7 +56,7 @@ export default function* iterate(
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
             // Match properties based on the field or wildcard pattern
             if (!field || (currentField && testWildcard(key, currentField)) || isTrailingWildcard) {
-              const newPath = currentPath.concat(key);
+              const newPath = [...currentPath, key];
               yield* _iterate(obj[key], newPath, depth + 1);
             } else if (
               arrayWithInnerKey &&
@@ -64,7 +64,7 @@ export default function* iterate(
               obj[key] !== null &&
               Object.prototype.hasOwnProperty.call(obj[key], currentField)
             ) {
-              const newPath = currentPath.concat(key, currentField);
+              const newPath = [...currentPath, key, currentField];
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               yield* _iterate(obj[key][currentField], newPath, depth + 1); // Recurse into the inner key
             }

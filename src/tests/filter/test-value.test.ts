@@ -14,12 +14,12 @@ describe('testString', () => {
 
   it('should return true for substring matches when quoted is false', () => {
     expect(testString('testing', 'test', false)).toBe(true);
-    expect(testString(12345, '234', false)).toBe(true);
+    expect(testString(12_345, '234', false)).toBe(true);
   });
 
   it('should return false for non-matching substrings when quoted is false', () => {
     expect(testString('testing', 'xyz', false)).toBe(false);
-    expect(testString(12345, '678', false)).toBe(false);
+    expect(testString(12_345, '678', false)).toBe(false);
   });
 
   it('should correctly compare boolean values', () => {

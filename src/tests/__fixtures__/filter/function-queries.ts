@@ -38,25 +38,25 @@ const testFunctionQueries: TestFilterQuery[] = [
         const tParam = node.params.find((p) => p.field == 't')!;
         if (process.env.MODE !== 'benchmark') {
           expect(tParam.value).toMatchInlineSnapshot(`
-          [
-            {
-              "type": "value",
-              "value": "a",
-            },
             [
               {
                 "type": "value",
-                "value": "b",
+                "value": "a",
               },
               [
                 {
                   "type": "value",
-                  "value": "c",
+                  "value": "b",
                 },
+                [
+                  {
+                    "type": "value",
+                    "value": "c",
+                  },
+                ],
               ],
-            ],
-          ]
-        `);
+            ]
+          `);
         }
 
         return {

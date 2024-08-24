@@ -24,8 +24,8 @@ export default [
 
   // Escaping
   { query: 'field:name:value', description: 'escaped field name' },
-  { query: 'field:foo\\-bar', description: 'escaped hyphen' },
-  { query: 'field:"a phrase with \\"escaped quotes\\""', description: 'escaped quotes in phrase' },
+  { query: String.raw`field:foo\-bar`, description: 'escaped hyphen' },
+  { query: String.raw`field:"a phrase with \"escaped quotes\""`, description: 'escaped quotes in phrase' },
 
   // Wildcards
   { query: 'field:foo*', description: 'trailing wildcard' },
@@ -50,8 +50,8 @@ export default [
 
   // Regex
   { query: 'field:/[a-z]+/', description: 'basic regex' },
-  { query: 'field:/\\d{2,4}/', description: 'regex with quantifier' },
-  { query: 'field:/\\d+\\.\\d*/', description: 'regex with escaped characters' },
+  { query: String.raw`field:/\d{2,4}/`, description: 'regex with quantifier' },
+  { query: String.raw`field:/\d+\.\d*/`, description: 'regex with escaped characters' },
   { query: 'field:/test.*/i', description: 'regex with flags' },
   { query: 'field:/test/ gm', description: 'regex without flags continuation' },
 
@@ -63,8 +63,8 @@ export default [
   { query: '_missing_:title', description: 'missing query' },
 
   // Queries with Special Characters
-  { query: 'field:"C:\\\\Users\\\\name"', description: 'escaped backslashes in path' },
-  { query: 'field:"foo\\ bar"', description: 'escaped space in phrase' },
+  { query: String.raw`field:"C:\\Users\\name"`, description: 'escaped backslashes in path' },
+  { query: String.raw`field:"foo\ bar"`, description: 'escaped space in phrase' },
   { query: 'field:"foo/bar"', description: 'slash in phrase' },
 
   // Nested Fields
@@ -136,7 +136,7 @@ export default [
     {
       query: 'title:\$refTitle',
       description: 'escaped variable reference',
-    }, 
+    },
     */
   {
     query: 'title:ref$title',
