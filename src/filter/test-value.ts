@@ -55,11 +55,7 @@ export function testWildcard(value: FlatType, filter: string): boolean {
  * @param filter The filter to compare against.
  * @returns True if the value matches the range filter, otherwise false.
  */
-export function testRangeNode(
-  operator?: RangeOperator,
-  value?: FlatType,
-  filter?: string | number | boolean | undefined | null,
-) {
+export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter?: string | number | boolean | null) {
   switch (operator) {
     case 'gte': {
       return compareValues(value, filter, -1) >= 0;
