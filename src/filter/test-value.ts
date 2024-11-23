@@ -104,6 +104,5 @@ function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
  * @returns The escaped string.
  */
 function escapeRegExp(str: string): string {
-  // eslint-disable-next-line unicorn/better-regex
   return str.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
