@@ -30,10 +30,11 @@ import {
   isVariableNode,
   isWildcard,
 } from '../types/guards';
-import iterate from '../utils/iterate';
+import iterate, { defaultIteratorConfig } from '../utils/iterate';
 import QueryParser from '../xlucene';
 import ReferenceResolver from './resolver';
 import { testRangeNode, testRegexp, testString, testWildcard } from '../filter/test-value';
+import { IteratorConfig } from '../types/iterator';
 
 /**
  * Class for evaluating an abstract syntax tree (AST).
@@ -44,10 +45,12 @@ export class ASTEvaluator {
    * Creates an instance of ASTEvaluator.
    * @param ast The abstract syntax tree (AST) to evaluate.
    * @param resolver Optional reference resolver to resolve variables and functions.
+   * @param iteratorConfig Optional iterator config to control the behavior of the object iterator
    */
   constructor(
     private readonly ast: Node,
     private readonly resolver?: ReferenceResolver,
+    private readonly iteratorConfig: IteratorConfig = defaultIteratorConfig,
   ) {}
 
   /**
@@ -255,7 +258,7 @@ export class ASTEvaluator {
       return false;
     };
 
-    for (const [, value] of iterate(item as never, node.field || '')) {
+    for (const [, value] of iterate(item as never, node.field || '', this.iteratorConfig)) {
       if (testValue(value as FlatType)) {
         return true;
       }

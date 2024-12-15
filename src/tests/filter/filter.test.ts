@@ -102,19 +102,23 @@ describe(`filter`, () => {
         email: 'rbouslerd@mail.com',
       },
     ];
+    const iteratorConfig = {
+      maxDepth: 3,
+      featureEnablePrivateField: true,
+    };
 
     it('should ignore private fields for non field queries', () => {
-      const result = filter(new QueryParser('13'), data);
+      const result = filter(new QueryParser('13'), data, undefined, iteratorConfig);
       expect(result).toEqual(data.filter((d) => d.age == 13));
     });
 
     it('should ignore private fields for wildcards', () => {
-      const result = filter(new QueryParser('*:13'), data);
+      const result = filter(new QueryParser('*:13'), data, undefined, iteratorConfig);
       expect(result).toEqual(data.filter((d) => d.age == 13));
     });
 
     it('should filter for private fields if specified', () => {
-      const result = filter(new QueryParser('_id:13'), data);
+      const result = filter(new QueryParser('id:13'), data, undefined, iteratorConfig);
       expect(result).toEqual(data.filter((d) => d._id == 13));
     });
   });
