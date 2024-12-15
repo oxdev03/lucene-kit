@@ -21,7 +21,6 @@ export default function* iterate(
   maxDepth: number = Infinity,
 ): Generator<IterationResult> {
   const splittedFields = field.split('.'); // Split the field pattern into individual components
-
   /**
    * Recursively iterates over the object or array and yields iteration results.
    * @param obj The object or array to iterate over.
@@ -39,13 +38,12 @@ export default function* iterate(
     // Check if the object is iterable and not in the NOT_ITERABLE list
     if (typeof obj === 'object' && obj !== null && !NOT_ITERABLE.some((cls) => obj instanceof cls)) {
       // Check if the object is an array with elements having the current field as a key
-      const arrayWithInnerKey =
-        Array.isArray(obj) && obj.some((o) => Object.prototype.hasOwnProperty.call(o, currentField));
-
+      const arrayWithInnerKey = Array.isArray(obj) && obj.some((o) => objectHasField(o, currentField));
+      const objWithCurrentField = objectHasField(obj, currentField);
       // If the object has the current field and it's not an array with inner key
-      if (!isWildcard && Object.prototype.hasOwnProperty.call(obj, currentField) && !arrayWithInnerKey) {
-        const newPath = [...currentPath, currentField]; // Create new path
-        yield* _iterate(obj[currentField], newPath, depth + 1); // Recurse into the next level
+      if (!isWildcard && objWithCurrentField && !arrayWithInnerKey) {
+        const newPath = [...currentPath, objWithCurrentField]; // Create new path
+        yield* _iterate(obj[objWithCurrentField], newPath, depth + 1); // Recurse into the next level
       } else {
         if (arrayWithInnerKey) {
           splittedFields.splice(currentPath.length, 0, '*'); // Add wildcard for array elements
@@ -53,20 +51,23 @@ export default function* iterate(
 
         // Iterate over the properties of the object
         for (const key in obj) {
+          // If the key starts with _, it shouldn't work for wildcard, if not explicity specified
+          if (isPrivateField(key) && privateFieldName(key) != currentField) continue;
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            let objKeyWithCurrentField = '';
             // Match properties based on the field or wildcard pattern
-            if (!field || (currentField && testWildcard(key, currentField)) || isTrailingWildcard) {
+            if (!field || (currentField && testWildcard(privateFieldName(key), currentField)) || isTrailingWildcard) {
               const newPath = [...currentPath, key];
               yield* _iterate(obj[key], newPath, depth + 1);
             } else if (
               arrayWithInnerKey &&
               typeof obj[key] === 'object' &&
               obj[key] !== null &&
-              Object.prototype.hasOwnProperty.call(obj[key], currentField)
+              (objKeyWithCurrentField = objectHasField(obj[key], currentField))
             ) {
-              const newPath = [...currentPath, key, currentField];
+              const newPath = [...currentPath, key, objKeyWithCurrentField];
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              yield* _iterate(obj[key][currentField], newPath, depth + 1); // Recurse into the inner key
+              yield* _iterate(obj[key][objKeyWithCurrentField], newPath, depth + 1); // Recurse into the inner key
             }
           }
         }
@@ -79,4 +80,33 @@ export default function* iterate(
 
   // Start the iteration from the top-level object or array
   yield* _iterate(obj, [], 1);
+}
+
+/**
+ * Checks if a field is private based on its naming convention (starts with an underscore).
+ * @param key - The field name to check.
+ * @returns True if the field name starts with an underscore, false otherwise.
+ */
+function isPrivateField(key: string): boolean {
+  return key.startsWith('_');
+}
+
+/**
+ * Removes the leading underscore from a private field name.
+ * @param key - The private field name.
+ * @returns The field name without the leading underscore.
+ */
+function privateFieldName(key: string): string {
+  return key.startsWith('_') ? key.slice(1) : key;
+}
+
+function objectHasField(obj: any[] | AnyObject, key: string): string {
+  const privateKey = '_' + key;
+  if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    return key;
+  } else if (Object.prototype.hasOwnProperty.call(obj, privateKey)) {
+    return privateKey;
+  }
+
+  return '';
 }

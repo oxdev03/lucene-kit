@@ -371,4 +371,141 @@ describe('iterate', () => {
       ]
     `);
   });
+
+  it('should not iterate over private fields by default', () => {
+    const obj = {
+      _id: 123,
+      name: 'Max',
+      person: {
+        _id: 456,
+        nested: {
+          foo: 'bar',
+        },
+      },
+    };
+
+    const result = [...iterate(obj, '')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "name",
+          "Max",
+        ],
+        [
+          "person.nested.foo",
+          "bar",
+        ],
+      ]
+    `);
+  });
+
+  it('should iterate over private field if specified', () => {
+    const obj = {
+      _id: 123,
+      _idSimilar: 456,
+      name: 'Max',
+    };
+
+    const result = [...iterate(obj, 'id')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "_id",
+          123,
+        ],
+      ]
+    `);
+  });
+
+  it('should not iterate over private fields by default with wildcard', () => {
+    const obj = {
+      private: {
+        _id: 123,
+        name: 'Max',
+      },
+      someArr: [
+        {
+          _id: 456,
+          name: 'Alex',
+        },
+      ],
+      _privateArr: [
+        {
+          name: 'John',
+        },
+      ],
+    };
+
+    const result = [...iterate(obj, '*')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "private.name",
+          "Max",
+        ],
+        [
+          "someArr.0.name",
+          "Alex",
+        ],
+      ]
+    `);
+  });
+
+  it('should iterate over private fields with wildcard if specified', () => {
+    const obj = {
+      private: {
+        _id: 123,
+        name: 'Max',
+      },
+      someArr: [
+        {
+          _id: 456,
+          name: 'Alex',
+        },
+      ],
+      _privateArr: [
+        {
+          _id: 789,
+          name: 'John',
+        },
+      ],
+    };
+
+    const result = [...iterate(obj, '*.id')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "private._id",
+          123,
+        ],
+        [
+          "someArr.0._id",
+          456,
+        ],
+      ]
+    `);
+  });
+
+  // This won't be supported
+  it.skip('should handle top-level wildcard for private fields', () => {
+    const obj = {
+      private: {
+        _id: 123,
+        _insider: true,
+      },
+    };
+    const result = [...iterate(obj, 'private.i*')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "private._id",
+          123,
+        ],
+        [
+          "private._insider",
+          true,
+        ],
+      ]
+    `);
+  });
 });
