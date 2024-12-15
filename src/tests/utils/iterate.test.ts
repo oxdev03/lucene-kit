@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import iterate from '../../utils/iterate';
+import iterate, { defaultIteratorConfig } from '../../utils/iterate';
 
 describe('iterate', () => {
   const testObj = {
@@ -313,7 +313,7 @@ describe('iterate', () => {
         c: 'value1',
       },
     };
-    const result = [...iterate(deepObj, 'a.*', 3)];
+    const result = [...iterate(deepObj, 'a.*', { ...defaultIteratorConfig, maxDepth: 3 })];
     expect(result).toMatchInlineSnapshot(`
       [
         [
@@ -357,7 +357,7 @@ describe('iterate', () => {
       }
     };
 
-    const result = [...iterate(new Cls(), '', 3)];
+    const result = [...iterate(new Cls(), '', { ...defaultIteratorConfig, maxDepth: 3 })];
     expect(result).toMatchInlineSnapshot(`
       [
         [
@@ -370,5 +370,140 @@ describe('iterate', () => {
         ],
       ]
     `);
+  });
+
+  describe('iterate private fields feature', () => {
+    const objWithPrivateFields = {
+      private: {
+        _id: 123,
+        name: 'Max',
+      },
+      someArr: [
+        {
+          _id: 456,
+          name: 'Alex',
+        },
+      ],
+      _privateArr: [
+        {
+          _id: 789,
+          name: 'John',
+        },
+      ],
+    };
+
+    it('should not iterate over private fields by default', () => {
+      const obj = {
+        _id: 123,
+        name: 'Max',
+        person: {
+          _id: 456,
+          nested: {
+            foo: 'bar',
+          },
+        },
+      };
+
+      const result = [...iterate(obj, '', { ...defaultIteratorConfig, featureEnablePrivateField: true })];
+      const resultDisabledFeature = [...iterate(obj, '')];
+      expect(result).toMatchInlineSnapshot(`
+        [
+          [
+            "name",
+            "Max",
+          ],
+          [
+            "person.nested.foo",
+            "bar",
+          ],
+        ]
+      `);
+      expect(result).not.toBe(resultDisabledFeature);
+    });
+
+    it('should iterate over private field if specified', () => {
+      const obj = {
+        _id: 123,
+        _idSimilar: 456,
+        name: 'Max',
+      };
+
+      const result = [...iterate(obj, 'id', { ...defaultIteratorConfig, featureEnablePrivateField: true })];
+      const resultDisabledFeature = [...iterate(obj, 'id')];
+      expect(result).toMatchInlineSnapshot(`
+        [
+          [
+            "_id",
+            123,
+          ],
+        ]
+      `);
+      expect(result).not.toBe(resultDisabledFeature);
+    });
+
+    it('should not iterate over private fields by default with wildcard', () => {
+      const result = [
+        ...iterate(objWithPrivateFields, '*', { ...defaultIteratorConfig, featureEnablePrivateField: true }),
+      ];
+      const resultDisabledFeature = [...iterate(objWithPrivateFields, '*')];
+      expect(result).toMatchInlineSnapshot(`
+        [
+          [
+            "private.name",
+            "Max",
+          ],
+          [
+            "someArr.0.name",
+            "Alex",
+          ],
+        ]
+      `);
+      expect(result).not.toBe(resultDisabledFeature);
+    });
+
+    it('should iterate over private fields with wildcard if specified', () => {
+      const result = [
+        ...iterate(objWithPrivateFields, '*.id', { ...defaultIteratorConfig, featureEnablePrivateField: true }),
+      ];
+      const resultDisabledFeature = [...iterate(objWithPrivateFields, '*.id')];
+      expect(result).toMatchInlineSnapshot(`
+        [
+          [
+            "private._id",
+            123,
+          ],
+          [
+            "someArr.0._id",
+            456,
+          ],
+        ]
+      `);
+      expect(result).not.toBe(resultDisabledFeature);
+    });
+
+    // This won't be supported
+    it.skip('should handle top-level wildcard for private fields', () => {
+      /* v8 ignore start */
+      const obj = {
+        private: {
+          _id: 123,
+          _insider: true,
+        },
+      };
+      const result = [...iterate(obj, 'private.i*')];
+      expect(result).toMatchInlineSnapshot(`
+        [
+          [
+            "private._id",
+            123,
+          ],
+          [
+            "private._insider",
+            true,
+          ],
+        ]
+      `);
+      /* v8 ignore stop */
+    });
   });
 });

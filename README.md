@@ -105,6 +105,33 @@ filter($q('age:[0 TO 80]'), data);
 filter($q('gender:*ale OR age:>55'), data);
 ```
 
+#### Private Fields
+
+In certain scenarios, you may want to exclude specific fields from being matched unless explicitly specified. For example, without additional configuration, a query like `luxury` would match both the `name` and `description` fields:
+
+```typescript
+const data = [
+  { id: 2, name: 'Luxury Car Model AC', description: 'Car Model AC stands out with its unique features.', age: 15 },
+  { id: 3, name: 'Car Model AD', description: 'Experience the luxury of Car Model AD.', age: 30 },
+];
+```
+
+This package provides a method to ignore private fields by prefixing their names with an underscore and enabling the feature over a config. Private fields are excluded from wildcard matches but can still be explicitly queried when needed.
+
+```typescript
+const data = [
+  { id: 2, name: 'Luxury Car Model AC', _description: 'Car Model AC stands out with its unique features.', age: 15 },
+  { id: 3, name: 'Car Model AD', _description: 'Experience the luxury of Car Model AD.', age: 30 },
+];
+
+const $q = (q) => new QueryParser(q);
+
+filter($q('luxury'), data, {..., featureEnablePrivateField: true});
+filter($q('description:luxury'), data, {..., featureEnablePrivateField: true});
+```
+
+In this example, a generic query like `luxury` would only match the `name` field. However, if you need to target the private field, you can do so explicitly, such as with `description:luxury`.
+
 ### Serializer Usage
 
 ```typescript
@@ -394,6 +421,7 @@ The following Lucene features are not currently supported but may be added in th
 The following filters are not yet supported:
 
 - ~~Iterating over Array Object key without index like (e.g., `field.key_in_array`, working `field.*.key_in_array`)~~ (Supported since v1.1.0)
+- The private field feature doesn't work for trailing queries (e.g. `field.private*`)
 
 ## Contributing
 
