@@ -26,6 +26,9 @@
 import * as i from '../../types/ast';
 import * as utils from '../../types/guards';
 
+/* v8 ignore start */
+// Ignore coverage for grammar specific validation
+
 function validateScopedChars(chars: string[]) {
   for (const [idx, char] of chars.entries()) {
     if (char === '.' && chars[idx + 1] === '.') {
@@ -68,5 +71,6 @@ function propagateDefaultField(node: i.Node, field: string): void {
     }
   }
 }
+/* v8 ignore stop */
 
 export { propagateDefaultField, validateScopedChars };

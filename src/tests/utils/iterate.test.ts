@@ -483,6 +483,7 @@ describe('iterate', () => {
 
     // This won't be supported
     it.skip('should handle top-level wildcard for private fields', () => {
+      /* v8 ignore start */
       const obj = {
         private: {
           _id: 123,
@@ -502,6 +503,7 @@ describe('iterate', () => {
           ],
         ]
       `);
+      /* v8 ignore stop */
     });
   });
 });
