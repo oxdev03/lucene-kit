@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-for-in-array */
 import { testWildcard } from '../filter/test-value';
 import { isWildCardString } from '../types/guards';
 import { IteratorConfig } from '../types/iterator';
