@@ -162,15 +162,24 @@ describe(`filter`, () => {
         }
       ];
 
-      const result = filter(new QueryParser('nested.tags:typescript'), nestedData);
-      expect(result).toEqual([
-        { 
-          id: 1,
-          nested: {
-            tags: ['javascript', 'typescript']
-          }
+      const queries = [
+        'nested.tags:typescript',      // explicit field path
+        '*.tags:typescript',           // wildcard prefix
+        'nested.tags*:typescript',     // wildcard suffix
+        '*.tags*:typescript'           // wildcard on both sides
+      ];
+
+      for (const query of queries) {
+        const result = filter(new QueryParser(query), nestedData);
+        expect(result).toEqual([
+          { 
+        id: 1,
+        nested: {
+          tags: ['javascript', 'typescript']
         }
-      ]);
+          }
+        ]);
+      }
     });
   });
 });
