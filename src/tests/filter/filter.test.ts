@@ -122,4 +122,55 @@ describe(`filter`, () => {
       expect(result).toEqual(data.filter((d) => d._id == 13));
     });
   });
+
+  describe('filter array fields', () => {
+    const data = [
+      { id: 1, tags: ['javascript', 'typescript'] },
+      { id: 2, tags: ['python', 'typescript'] },
+      { id: 3, tags: ['java'] },
+      { id: 4, tags: [] },
+      { id: 5 }
+    ];
+
+    it('should filter by array value', () => {
+      const result = filter(new QueryParser('tags:typescript'), data);
+      expect(result).toEqual([
+        { id: 1, tags: ['javascript', 'typescript'] },
+        { id: 2, tags: ['python', 'typescript'] }
+      ]);
+    });
+
+    it('should handle nested array fields', () => {
+      const nestedData = [
+        { 
+          id: 1,
+          nested: {
+            tags: ['javascript', 'typescript']
+          }
+        },
+        { 
+          id: 2,
+          nested: {
+            tags: ['python']
+          }
+        },
+        { 
+          id: 3,
+          nested: {
+            other: ['something']
+          }
+        }
+      ];
+
+      const result = filter(new QueryParser('nested.tags:typescript'), nestedData);
+      expect(result).toEqual([
+        { 
+          id: 1,
+          nested: {
+            tags: ['javascript', 'typescript']
+          }
+        }
+      ]);
+    });
+  });
 });

@@ -41,6 +41,14 @@ export default function* iterate(
 
     // Check if the object is iterable and not in the NOT_ITERABLE list
     if (typeof obj === 'object' && obj !== null && !NOT_ITERABLE.some((cls) => obj instanceof cls)) {
+      // Handle plain arrays directly if we're at the target field and not using a wildcard
+      if (Array.isArray(obj) && currentPath.length === splittedFields.length && !isTrailingWildcard && field) {
+        for (let i = 0; i < obj.length; i++) {
+          yield [[...currentPath, i].join('.'), obj[i]];
+        }
+        return;
+      }
+
       // Check if the object is an array with elements having the current field as a key
       const arrayWithInnerKey = Array.isArray(obj) && obj.some((o) => objectHasField(o, currentField, checkPrivate));
       const objWithCurrentField = objectHasField(obj, currentField, checkPrivate);
