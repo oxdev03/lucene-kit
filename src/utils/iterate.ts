@@ -43,8 +43,8 @@ export default function* iterate(
     if (typeof obj === 'object' && obj !== null && !NOT_ITERABLE.some((cls) => obj instanceof cls)) {
       // Handle plain arrays directly if we're at the target field and not using a wildcard
       if (Array.isArray(obj) && currentPath.length === splittedFields.length && !isTrailingWildcard && field) {
-        for (let i = 0; i < obj.length; i++) {
-          yield [[...currentPath, i].join('.'), obj[i]];
+        for (const [i, element] of obj.entries()) {
+          yield [[...currentPath, i].join('.'), element];
         }
         return;
       }
