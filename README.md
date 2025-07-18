@@ -234,6 +234,9 @@ sentence:word
 # Search for 'word' in the object properties starting with 's' and any nested property, e.g., [{s: {a: 'word'}}]
 s*:word
 
+# Search for 'word' in array e.g. [{ s: ['word','number'] }]
+s:word
+
 # Search for 'word' in the object by nested key 's.a'
 s.a:word
 

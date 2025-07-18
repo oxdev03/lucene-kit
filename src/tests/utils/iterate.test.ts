@@ -372,6 +372,25 @@ describe('iterate', () => {
     `);
   });
 
+  it('should handle object with plain array', () => {
+    const someObj = {
+      tags: ['tagA', 'tagB'],
+    };
+    const result = [...iterate(someObj, 'tags')];
+    expect(result).toMatchInlineSnapshot(`
+      [
+        [
+          "tags.0",
+          "tagA",
+        ],
+        [
+          "tags.1",
+          "tagB",
+        ],
+      ]
+    `);
+  });
+
   describe('iterate private fields feature', () => {
     const objWithPrivateFields = {
       private: {
