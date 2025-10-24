@@ -108,7 +108,7 @@ export class ASTEvaluator {
       result.push(...(subResult.filter((r) => !result.includes(r as never)) as never[]));
     }
 
-    return result.sort((a, b) => data.indexOf(a) - data.indexOf(b));
+    return result.toSorted((a, b) => data.indexOf(a) - data.indexOf(b));
   }
 
   /**
