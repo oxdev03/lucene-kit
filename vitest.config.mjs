@@ -4,6 +4,9 @@ export default defineConfig({
   plugins: [codspeedPlugin()],
   test: {
     include: ['src/**/*.test.ts'],
+    benchmark: {
+      include: ['src/**/*.bench.ts'],
+    },
     coverage: {
       exclude: ['scripts/**', 'src/benchmark/**', 'src/xlucene/lucene.ts', 'commitlint.config.js'],
     },
