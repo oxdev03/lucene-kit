@@ -49,7 +49,7 @@
     "bundle": "tsup src/index.ts --format cjs,esm --dts --clean",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "bench": "vitest bench",
+    "bench": "vitest bench --run",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
