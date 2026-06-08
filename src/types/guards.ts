@@ -71,14 +71,14 @@ export function isVariableNode(node: i.Node): node is i.VariableNode {
   return isTerm(node) && node?.value?.type == 'variable';
 }
 
-export function isWildCardString(term) {
+export function isWildcardString(term) {
   if (typeof term !== 'string') return false;
   if (term.includes('*') || term.includes('?')) return true;
   return false;
 }
 
 /* export function isWildcardField(node: i.Node): boolean {
-  return !!(node && isWildCardString((node as any).field));
+  return !!(node && isWildcardString((node as any).field));
 } */
 
 export function isTerm(node: i.Node): node is i.Term {

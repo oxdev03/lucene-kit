@@ -4,8 +4,8 @@
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "noImplicitAny": false,
     "target": "esnext",
     "outDir": "dist",
@@ -13,6 +13,7 @@
     "strict": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
+    "types": ["node"],
     "experimentalDecorators": true,
     "removeComments": false
   },

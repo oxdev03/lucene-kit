@@ -4,6 +4,7 @@ import codspeedPlugin from '@codspeed/vitest-plugin';
 export default defineConfig({
   plugins: [codspeedPlugin()],
   test: {
+    exclude: ['node_modules', 'dist'],
     coverage: {
       exclude: ['scripts/**', 'src/benchmark/**', 'src/xlucene/lucene.ts', 'commitlint.config.js'],
     },

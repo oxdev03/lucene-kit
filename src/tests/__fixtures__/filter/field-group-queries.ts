@@ -89,8 +89,7 @@ const testFieldGroupQueries: TestFilterQuery[] = [
     difficulty: 'nested',
     desc: 'Nested Test 2',
     query: 'gender:(Male OR Female) AND (age:(20 OR 25) OR age:(30 OR 35))',
-    expected: (p) =>
-      (p.gender === 'Male' || p.gender === 'Female') && (p.age === 20 || p.age === 25 || p.age === 30 || p.age === 35),
+    expected: (p) => ['Male', 'Female'].includes(p.gender) && [20, 25, 30, 35].includes(p.age),
     resultLen: (len) => expect(len).toMatchInlineSnapshot(`7`),
   },
 ];

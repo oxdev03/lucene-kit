@@ -38,6 +38,15 @@ export default tseslint.config(
       'unicorn/no-array-callback-reference': 'off',
       'unicorn/no-null': 'off',
       'unicorn/no-useless-undefined': 'off',
+      'unicorn/filename-case': [
+        'error',
+        {
+          cases: {
+            kebabCase: true,
+          },
+          ignore: [/.*__fixtures__.*/],
+        },
+      ],
     },
   },
 );

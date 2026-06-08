@@ -1,6 +1,6 @@
 import { RangeOperator } from '../types/ast';
 import { FlatType } from '../types/data';
-import { isWildCardString } from '../types/guards';
+import { isWildcardString } from '../types/guards';
 
 const MAX_TIMESTAMP = 8.64e15;
 
@@ -85,7 +85,7 @@ export function testRangeNode(operator?: RangeOperator, value?: FlatType, filter
 function compareValues(a: FlatType, b: FlatType, falseValue: number): number {
   if (typeof a === 'number') {
     return a - Number(b);
-  } else if (typeof b === 'string' && isWildCardString(b)) {
+  } else if (typeof b === 'string' && isWildcardString(b)) {
     return testWildcard(a, b) ? 0 : -1;
   } else if (a instanceof Date) {
     return a.getTime() - new Date(b == Infinity ? MAX_TIMESTAMP : String(b)).getTime();
