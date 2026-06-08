@@ -30,9 +30,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
   "files": [
@@ -74,7 +74,7 @@
     "eslint-plugin-unicorn": "^65.0.0",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "peggy": "^5.1.0",
+    "peggy": "^3.0.2",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
     "ts-pegjs": "^4.2.1",
