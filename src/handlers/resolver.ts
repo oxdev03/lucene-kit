@@ -33,13 +33,13 @@ export type FunctionResolverReturnType<T> =
  * a callback function for resolving functions, taking a function node and filtered data,
  * and returning the resolved value or an object containing resolved value and filtered data.
  */
-export type FunctionResolverCallBack<T> = (node: FunctionNode, data: T) => FunctionResolverReturnType<T>;
+export type FunctionResolverCallback<T> = (node: FunctionNode, data: T) => FunctionResolverReturnType<T>;
 
 /**
  * a function resolver, a mapping from function names to resolver callback functions.
  */
 export type FunctionResolver = {
-  [name: string]: FunctionResolverCallBack<any>;
+  [name: string]: FunctionResolverCallback<any>;
 };
 
 /**
@@ -76,7 +76,7 @@ export default class ReferenceResolver {
    * @param resolver The callback function for resolving the function.
    * @returns The ReferenceResolver instance for chaining.
    */
-  addFunctionResolver(name: string, resolver: FunctionResolverCallBack<any>): this {
+  addFunctionResolver(name: string, resolver: FunctionResolverCallback<any>): this {
     this.functionResolver[name] = resolver;
     return this;
   }

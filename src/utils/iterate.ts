@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-for-in-array */
 import { testWildcard } from '../filter/test-value';
-import { isWildCardString } from '../types/guards';
+import { isWildcardString } from '../types/guards';
 import { IteratorConfig } from '../types/iterator';
 
 type AnyObject = { [key: string]: any };
@@ -37,7 +37,7 @@ export default function* iterate(
     const currentField = splittedFields[currentPath.length]; // Get the current field to match
     const lastField = splittedFields.length > 0 ? splittedFields.at(-1) : ''; // Get the last field in the pattern
     const isTrailingWildcard = lastField?.endsWith('*') && !currentField; // Check if it's a trailing wildcard pattern
-    const isWildcard = isWildCardString(currentField); // Check if the current field is a wildcard
+    const isWildcard = isWildcardString(currentField); // Check if the current field is a wildcard
 
     // Check if the object is iterable and not in the NOT_ITERABLE list
     if (typeof obj === 'object' && obj !== null && !NOT_ITERABLE.some((cls) => obj instanceof cls)) {
@@ -66,7 +66,7 @@ export default function* iterate(
           // If the key starts with _, it shouldn't work for wildcard, if not explicity specified
           if (checkPrivate && isPrivateField(key) && privateFieldName(key) != currentField) continue;
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            let objKeyWithCurrentField = '';
+            let objKeyWithCurrentField: string;
             // Match properties based on the field or wildcard pattern
             if (
               !field ||

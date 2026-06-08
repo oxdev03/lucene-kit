@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import { TestFilterQuery } from '.';
 
-const testWildCardQueries: TestFilterQuery[] = [
+const testWildcardQueries: TestFilterQuery[] = [
   {
     group: 'wildcard',
     difficulty: 'simple',
@@ -52,4 +52,4 @@ const testWildCardQueries: TestFilterQuery[] = [
   },
 ];
 
-export default testWildCardQueries;
+export default testWildcardQueries;
